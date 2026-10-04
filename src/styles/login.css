@@ -1,0 +1,75 @@
+/* Pantalla de inicio de sesión: estilos acotados con el prefijo lg- */
+.lg-page {
+  position: relative; isolation: isolate; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 32px 16px;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif; color: #202126;
+  background:
+    radial-gradient(60% 55% at 50% 0%, #FF3B45 0%, rgba(244, 0, 9, 0) 70%),
+    radial-gradient(50% 50% at 0% 100%, #A9000D 0%, rgba(169, 0, 13, 0) 70%),
+    radial-gradient(50% 50% at 100% 100%, #A9000D 0%, rgba(169, 0, 13, 0) 70%),
+    linear-gradient(180deg, #F40009, #DC0012 60%, #B8000F);
+}
+.lg-bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.lg-wave { position: absolute; width: 55%; height: 62%; }
+.lg-wave-l { left: 0; top: 24%; }
+.lg-wave-r { right: 0; top: 30%; }
+.lg-mark { position: absolute; top: -4%; right: -8%; width: min(46vw, 640px); opacity: 0.06; }
+.lg-bubble {
+  position: absolute; aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.45);
+  background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0.25) 14%, rgba(255, 255, 255, 0.06) 55%);
+}
+
+.lg-card { width: min(560px, 100%); background: #fff; border-radius: 24px; padding: 44px; box-shadow: 0 24px 70px rgba(75, 0, 0, 0.18); border: 1px solid rgba(255, 255, 255, 0.6); }
+.lg-logo { display: block; width: 200px; height: auto; }
+.lg-card h1 { margin: 22px 0 6px; font-size: clamp(24px, 6vw, 31px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: #202126; }
+.lg-sub { margin: 0 0 28px; color: #727B8D; font-size: 17px; line-height: 1.5; }
+
+.lg-error { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; padding: 12px 14px; border-radius: 12px; background: #FFF2F3; border: 1px solid #F7B8BC; color: #A9000D; font-size: 14px; line-height: 1.4; }
+.lg-error svg { flex: none; margin-top: 1px; }
+
+.lg-field { margin-bottom: 18px; }
+.lg-field label { display: block; margin-bottom: 8px; font-size: 15px; font-weight: 500; color: #202126; }
+.lg-input { position: relative; }
+.lg-input > svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #8A93A4; pointer-events: none; }
+.lg-input input {
+  width: 100%; height: 54px; padding: 0 52px 0 50px; font: inherit; font-size: 16px; color: #202126; background: #fff;
+  border: 1px solid #DCE0E7; border-radius: 15px; outline: none; transition: border-color 0.18s, box-shadow 0.18s;
+}
+.lg-input input::placeholder { color: #98A0B0; }
+.lg-input input:focus { border-color: #F40009; box-shadow: 0 0 0 4px rgba(244, 0, 9, 0.1); }
+.lg-eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 12px; background: none; color: #727B8D; cursor: pointer; }
+.lg-eye:hover { color: #202126; }
+.lg-eye:focus-visible, .lg-submit:focus-visible, .lg-chips button:focus-visible { outline: 3px solid rgba(244, 0, 9, 0.4); outline-offset: 2px; }
+
+.lg-submit {
+  width: 100%; height: 54px; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 10px;
+  border: 0; border-radius: 999px; background: #E50F1F; color: #fff; font: inherit; font-size: 17px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 10px 24px rgba(244, 0, 9, 0.25); transition: background 0.18s, box-shadow 0.18s;
+}
+.lg-submit:hover:not(:disabled) { background: #C80010; }
+.lg-submit:disabled { cursor: progress; opacity: 0.9; }
+.lg-spin { animation: lg-spin 0.9s linear infinite; }
+@keyframes lg-spin { to { transform: rotate(360deg); } }
+
+.lg-demo { margin-top: 26px; padding-top: 20px; border-top: 1px solid #EEF0F3; }
+.lg-demo p { margin: 0 0 12px; color: #727B8D; font-size: 14px; }
+.lg-chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.lg-chips button {
+  min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; border: 1px solid #DCE0E7; border-radius: 999px;
+  background: #fff; color: #202126; font: inherit; font-size: 15px; cursor: pointer; transition: background 0.18s, border-color 0.18s;
+}
+.lg-chips button svg { color: #F40009; }
+.lg-chips button:hover { background: #FFF2F3; border-color: #F7B8BC; }
+
+@media (max-width: 620px) {
+  .lg-page { align-items: start; padding: 20px 16px; }
+  .lg-card { padding: 24px; border-radius: 20px; }
+  .lg-logo { width: 170px; }
+  .lg-sub { font-size: 16px; }
+  .lg-bubble { display: none; }
+  .lg-wave { width: 100%; height: 40%; }
+  .lg-mark { width: 90vw; right: -25%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-spin { animation: none; }
+  .lg-page * { transition: none !important; }
+}

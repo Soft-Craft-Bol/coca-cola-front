@@ -1,37 +1,23 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  ArrowRight, BarChart3, ClipboardList, FileSpreadsheet, GlassWater, Menu, QrCode, ScanLine, Star, Users, X,
-} from 'lucide-react'
+import { ArrowRight, Menu, X } from 'lucide-react'
 import logoWhite from '@/assets/coca-cola-logo-white.png'
 import canRed from '@/assets/landing/can-red.png'
 import canZero from '@/assets/landing/can-zero.png'
 import logoRed from '@/assets/coca-cola-logo-transparent.png'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import '@/styles/landing.css'
+import '@/styles/landing-light.css'
 import Bubbles from '../components/Bubbles'
 import CountUp from '../components/CountUp'
-import DashboardPreview from '../components/DashboardPreview'
+import HowItWorks from '../components/HowItWorks'
+import PanelSection from '../components/PanelSection'
 import HeroScene from '../components/HeroScene'
 import Reveal from '../components/Reveal'
-import TiltCard from '../components/TiltCard'
+import LightDecor from '../components/LightDecor'
+import Solution from '../components/Solution'
 import UpcomingEvents from '../components/UpcomingEvents'
 import { useParallax } from '../hooks/useParallax'
-
-const FEATURES = [
-  { icon: QrCode, title: 'Registro con QR', text: 'Formulario web, preinscripción o tablet en sitio. Cada asistente recibe su código QR personal.' },
-  { icon: ScanLine, title: 'Control de ingreso', text: 'Escanea el código y registra la hora de llegada: distingue a los registrados de quienes realmente asistieron.' },
-  { icon: GlassWater, title: 'Degustaciones', text: 'Qué producto probó cada persona, cómo lo calificó y si lo compraría después de probarlo.' },
-  { icon: BarChart3, title: 'Indicadores en vivo', text: 'Asistencia, participación, conversión, recurrencia y satisfacción en un panel claro para decidir rápido.' },
-  { icon: Star, title: 'Encuestas y NPS', text: 'Mide la satisfacción del evento y qué tan probable es que recomienden la experiencia.' },
-  { icon: FileSpreadsheet, title: 'Reportes y Power BI', text: 'Compara eventos, exporta a CSV y conecta tu dashboard ejecutivo con la información estructurada.' },
-]
-
-const STEPS = [
-  { n: '01', phase: 'Antes', title: 'Registro y planificación', text: 'Crea el evento, define campaña, presupuesto y productos. Abre el registro y comparte el QR.', icon: ClipboardList },
-  { n: '02', phase: 'Durante', title: 'Control e interacción', text: 'Valida asistencia en la puerta y registra cada degustación, dinámica, canje y conversión.', icon: Users },
-  { n: '03', phase: 'Después', title: 'Seguimiento y análisis', text: 'Convierte los datos en indicadores, compara eventos y entiende qué experiencia funcionó mejor.', icon: BarChart3 },
-]
 
 const STATS = [
   { to: 10, suffix: '+', label: 'Indicadores clave' },
@@ -47,6 +33,7 @@ export default function LandingPage() {
   const { isAuthenticated } = useAuth()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [active, setActive] = useState('')
   useParallax(root)
 
   useEffect(() => {
@@ -54,6 +41,17 @@ export default function LandingPage() {
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Marca en la barra la sección visible
+  useEffect(() => {
+    const ids = ['eventos', 'solucion', 'como-funciona']
+    const io = new IntersectionObserver(
+      entries => entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id) }),
+      { rootMargin: '-35% 0px -55% 0px' },
+    )
+    ids.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el) })
+    return () => io.disconnect()
   }, [])
 
   const cta = isAuthenticated ? { to: '/panel', label: 'Ir al panel' } : { to: '/login', label: 'Ingresar' }
@@ -64,9 +62,9 @@ export default function LandingPage() {
       <header className={`lp-nav ${scrolled ? 'scrolled' : ''}`}>
         <a href="#inicio" className="lp-brand" aria-label="Coca-Cola"><img src={logoWhite} alt="Coca-Cola" /></a>
         <nav className={open ? 'open' : ''} onClick={() => setOpen(false)}>
-          <a href="#eventos">Eventos</a>
-          <a href="#solucion">Solución</a>
-          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#eventos" aria-current={active === 'eventos'}>Eventos</a>
+          <a href="#solucion" aria-current={active === 'solucion'}>Solución</a>
+          <a href="#como-funciona" aria-current={active === 'como-funciona'}>Cómo funciona</a>
           <Link to="/mi-entrada">Mi entrada</Link>
         </nav>
         <Link to={cta.to} className="lp-btn lp-btn-white lp-nav-cta">{cta.label}</Link>
@@ -118,75 +116,14 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* ------------------------------------------------ eventos abiertos */}
-      <UpcomingEvents />
-
-      {/* ------------------------------------------------ solución */}
-      <section id="solucion" className="lp-section">
-        <Reveal><span className="eyebrow dark">La solución</span></Reveal>
-        <Reveal delay={80}><h2>Todo el evento en un solo lugar</h2></Reveal>
-        <Reveal delay={160}>
-          <p className="lead">
-            Deja de repartir la información entre hojas de cálculo, formularios y fotos. Una plataforma que
-            estructura cada dato del evento y lo convierte en resultados medibles.
-          </p>
-        </Reveal>
-        <div className="features">
-          {FEATURES.map(({ icon: Icon, title, text }, i) => (
-            <Reveal key={title} delay={i * 90} direction="zoom">
-              <TiltCard>
-                <div className="feature-icon"><Icon size={26} /></div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </TiltCard>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ------------------------------------------------ cómo funciona */}
-      <section id="como-funciona" className="lp-section lp-steps-section">
-        <Reveal><span className="eyebrow dark">Cómo funciona</span></Reveal>
-        <Reveal delay={80}><h2>De la planificación a la decisión</h2></Reveal>
-        <div className="steps">
-          <div className="steps-line" aria-hidden="true" />
-          {STEPS.map(({ n, phase, title, text, icon: Icon }, i) => (
-            <Reveal key={n} delay={i * 160} direction={i % 2 ? 'right' : 'left'}>
-              <article className="step">
-                <div className="step-num">{n}</div>
-                <div className="step-body">
-                  <span className="step-phase"><Icon size={15} /> {phase}</span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ------------------------------------------------ panel */}
-      <section id="panel" className="lp-section lp-panel-section">
-        <div className="panel-copy">
-          <Reveal><span className="eyebrow">El panel</span></Reveal>
-          <Reveal delay={80}><h2>Indicadores que cuentan la historia del evento</h2></Reveal>
-          <Reveal delay={160}>
-            <p className="lead">
-              “Asistieron 280 personas, 126 interactuaron con productos, se generaron 84 conversiones y el
-              producto estrella fue el que más interés despertó.” Así de claro.
-            </p>
-          </Reveal>
-          <Reveal delay={240}>
-            <ul className="check-list">
-              <li>Embudo de interacción: del registro a la conversión</li>
-              <li>Comparación entre eventos y campañas</li>
-              <li>Participantes nuevos y recurrentes</li>
-              <li>Satisfacción por criterio y NPS</li>
-            </ul>
-          </Reveal>
-        </div>
-        <Reveal direction="right" className="panel-visual"><DashboardPreview /></Reveal>
-      </section>
+      {/* ------------------------------------------------ eventos y solución (fondo claro compartido) */}
+      <div className="lp-light">
+        <LightDecor />
+        <UpcomingEvents />
+        <Solution />
+        <HowItWorks />
+        <PanelSection />
+      </div>
 
       {/* ------------------------------------------------ cifras */}
       <section id="cifras" className="lp-stats">
