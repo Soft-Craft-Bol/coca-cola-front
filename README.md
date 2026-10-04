@@ -12,8 +12,13 @@ npm run build    # tsc + vite build
 El frontend consume la API Spring Boot (`../cocacola/cocacola`). Configura la URL en `.env`:
 
 ```
-VITE_API_URL=http://localhost:8080/api
+# .env.development (npm run dev)
+VITE_API_URL=http://localhost:8090/api
+# .env.production (npm run build, el que se publica)
+VITE_API_URL=https://apicocacola.softcraftbol.com/api
 ```
+
+Vite elige el archivo según el comando, así que al subir a git y construir para producción toma solo la URL de `apicocacola.softcraftbol.com`.
 
 Arranca primero el backend (`mvn spring-boot:run`); al iniciar carga usuarios demo, el catálogo de productos y 3 eventos de ejemplo.
 Todo el acceso HTTP pasa por `src/shared/services/api.ts` (token JWT en `Authorization: Bearer`, errores `{ "message": "..." }`; ante un 401 cierra la sesión).

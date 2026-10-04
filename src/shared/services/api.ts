@@ -1,6 +1,6 @@
 import { queryClient } from './queryClient'
 
-const BASE_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api'
+const BASE_URL: string = import.meta.env.VITE_API_URL ?? 'https://apicocacola.softcraftbol.com/api'
 export const API_URL = BASE_URL
 const TOKEN_KEY = 'cc_token'
 const SESSION_KEY = 'cc_auth'
