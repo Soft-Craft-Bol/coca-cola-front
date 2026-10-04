@@ -14,6 +14,7 @@ import { useParticipants } from '@/features/participants/hooks/useParticipants'
 import InteractionForm from '../components/InteractionForm'
 import { useActivities, useInteractions } from '../hooks/useActivities'
 import { activityService } from '../services/activityService'
+import { couponService } from '@/features/coupons/services/couponService'
 
 export default function ActivitiesPage() {
   const { eventId, setEventId, event } = useSelectedEvent()
@@ -39,6 +40,12 @@ export default function ActivitiesPage() {
   const addInteraction = async (data: InteractionInput) => {
     await activityService.addInteraction(data)
     toast.success('Interacción registrada')
+    reloadInts()
+  }
+
+  const redeemCoupon = async (data: { eventId: string; participantId: string; activityId: string; code: string }) => {
+    await couponService.redeem(data)
+    toast.success('Cupón canjeado')
     reloadInts()
   }
 
@@ -71,7 +78,7 @@ export default function ActivitiesPage() {
           <Card title="Nueva interacción">
             {activities.length === 0
               ? <div className="empty">Primero crea actividades para este evento</div>
-              : <InteractionForm event={event} activities={activities} attendees={attendees} onSubmit={addInteraction} />}
+              : <InteractionForm event={event} activities={activities} attendees={attendees} onSubmit={addInteraction} onRedeem={redeemCoupon} />}
           </Card>
           <Card title="Últimas interacciones">
             {(interactions ?? []).slice(0, 8).map((i) => (
