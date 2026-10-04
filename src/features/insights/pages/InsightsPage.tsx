@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { PageHeader } from '@/shared/components/ui'
 import EventSelector from '@/features/events/components/EventSelector'
 import AffinityTab from '../components/AffinityTab'
-import ChatTab from '../components/ChatTab'
 import ForecastTab from '../components/ForecastTab'
 import RecommendationsTab from '../components/RecommendationsTab'
 import SegmentsTab from '../components/SegmentsTab'
@@ -14,7 +13,6 @@ const TABS = [
   ['afinidad', 'Afinidad'],
   ['prediccion', 'Predicción'],
   ['recomendaciones', 'Recomendaciones'],
-  ['asistente', 'Asistente'],
 ] as const
 
 type Tab = (typeof TABS)[number][0]
@@ -28,7 +26,7 @@ export default function InsightsPage() {
       <PageHeader
         title="Inteligencia"
         subtitle="Segmentos, afinidad, predicción de asistencia y recomendaciones calculados con los datos de tus eventos"
-        actions={tab !== 'prediccion' && tab !== 'asistente' && <EventSelector value={eventId} onChange={setEventId} allowAll />}
+        actions={tab !== 'prediccion' && <EventSelector value={eventId} onChange={setEventId} allowAll />}
       />
       <div className="tabs">
         {TABS.map(([k, l]) => <button key={k} className={`tab ${tab === k ? 'on' : ''}`} onClick={() => setTab(k)}>{l}</button>)}
@@ -38,7 +36,6 @@ export default function InsightsPage() {
       {tab === 'afinidad' && <AffinityTab eventId={eventId} />}
       {tab === 'prediccion' && <ForecastTab />}
       {tab === 'recomendaciones' && <RecommendationsTab eventId={eventId} />}
-      {tab === 'asistente' && <ChatTab />}
     </>
   )
 }

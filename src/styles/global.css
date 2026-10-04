@@ -385,3 +385,20 @@ code { background: #f3f4f6; padding: 1px 6px; border-radius: 5px; font-size: 12.
 .chat-msg.assistant .chat-avatar { background: #fee2e2; color: #e61a27; }
 .chat-bubble { max-width: 80%; white-space: pre-wrap; line-height: 1.6; font-size: 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 10px 14px; }
 .chat-msg.user .chat-bubble { background: #e61a27; border-color: #e61a27; color: #fff; }
+
+/* ---------- Burbuja del asistente (flotante) ---------- */
+.chat-fab { position: fixed; right: 20px; bottom: 20px; z-index: 60; width: 56px; height: 56px; border-radius: 50%; border: 0; cursor: pointer;
+  background: #e61a27; color: #fff; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(230, 26, 39, .4); transition: transform .15s; }
+.chat-fab:hover { transform: scale(1.06); }
+.chat-widget { position: fixed; right: 20px; bottom: 88px; z-index: 60; width: 380px; max-width: calc(100vw - 24px); height: 540px; max-height: calc(100vh - 110px);
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, .22); display: flex; flex-direction: column; overflow: hidden; }
+.chat-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #e61a27; color: #fff; }
+.chat-icon-btn { background: transparent; border: 0; color: #fff; cursor: pointer; display: grid; place-items: center; padding: 4px; border-radius: 6px; }
+.chat-icon-btn:hover { background: rgba(255, 255, 255, .2); }
+.chat-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.chat-form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #e5e7eb; }
+.chat-form input { flex: 1; min-width: 0; }
+@media (max-width: 520px) {
+  .chat-widget { right: 12px; bottom: 80px; height: calc(100vh - 100px); }
+  .chat-fab { right: 14px; bottom: 14px; }
+}
