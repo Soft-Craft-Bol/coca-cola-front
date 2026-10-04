@@ -61,7 +61,7 @@ const spaced = (ctx: CanvasRenderingContext2D, value: string) => {
 }
 
 const formatWhen = (iso: string) => {
-  const text = new Intl.DateTimeFormat('es-CO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(iso))
+  const text = new Intl.DateTimeFormat('es-BO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(iso))
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 

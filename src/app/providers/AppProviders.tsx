@@ -1,11 +1,15 @@
 import type { ReactNode } from 'react'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
+import { queryClient } from '@/shared/services/queryClient'
 import { ToastProvider } from '@/shared/components/Toast'
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (
-    <BrowserRouter>
-      <ToastProvider>{children}</ToastProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ToastProvider>{children}</ToastProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }

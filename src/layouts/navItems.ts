@@ -1,4 +1,4 @@
-import { BarChart3, CalendarDays, FileText, GlassWater, KeyRound, LayoutDashboard, QrCode, Send, Sparkles, Star, Users } from 'lucide-react'
+import { BarChart3, CalendarDays, FileText, GlassWater, KeyRound, Package, LayoutDashboard, QrCode, Send, Sparkles, Star, Users } from 'lucide-react'
 
 export const NAV = [
   { to: '/panel', label: 'Panel', icon: BarChart3, roles: ['admin', 'organizer', 'marketing'], end: true },
@@ -11,5 +11,6 @@ export const NAV = [
   { to: '/comunicaciones', label: 'Comunicaciones', icon: Send, roles: ['admin', 'marketing'] },
   { to: '/reportes', label: 'Reportes', icon: FileText, roles: ['admin', 'marketing'] },
   { to: '/power-bi', label: 'Power BI', icon: LayoutDashboard, roles: ['admin', 'marketing'] },
+  { to: '/catalogos', label: 'Catálogos', icon: Package, roles: ['admin'] },
   { to: '/usuarios', label: 'Usuarios', icon: KeyRound, roles: ['admin'] },
 ]

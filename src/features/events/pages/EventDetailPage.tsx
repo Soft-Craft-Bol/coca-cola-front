@@ -7,13 +7,15 @@ import { formatCurrency, formatDate, formatPercent } from '@/shared/utils/format
 import { optimizeImage } from '@/shared/utils/image'
 import { useAsync } from '@/shared/hooks/useAsync'
 import { dashboardService } from '@/features/dashboard/services/dashboardService'
-import { useEvent, useProducts } from '../hooks/useEvents'
+import { useEvent, useExperiences, useProducts } from '../hooks/useEvents'
+import { productLabel } from '@/shared/utils/catalog'
 import EventOperationsPanel from '../components/EventOperationsPanel'
 
 export default function EventDetailPage() {
   const { id = '' } = useParams()
   const { data: ev, loading, error, refresh } = useEvent(id)
   const { data: products } = useProducts()
+  const { data: experiences } = useExperiences()
   const { data: m } = useAsync(() => dashboardService.event(id), [id])
 
   if (loading) return <Loading />
@@ -58,7 +60,11 @@ export default function EventDetailPage() {
             <div><strong>Objetivo:</strong> {ev.objective || '—'}</div>
             <div>
               <strong>Productos destacados:</strong>{' '}
-              {ev.productIds.map((pid) => products?.find((p) => p.id === pid)?.name).filter(Boolean).join(', ') || '—'}
+              {ev.productIds.map((pid) => products?.find((p) => p.id === pid)).filter((p) => p !== undefined).map((p) => productLabel(p)).join(', ') || '—'}
+            </div>
+            <div>
+              <strong>Experiencias destacadas:</strong>{' '}
+              {(ev.experienceIds ?? []).map((id) => experiences?.find((x) => x.id === id)?.name).filter(Boolean).join(', ') || '—'}
             </div>
           </div>
         </Card>

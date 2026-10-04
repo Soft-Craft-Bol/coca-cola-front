@@ -26,8 +26,8 @@ export default function EventCard({ event, onEdit, onDelete, onStatusChange, bus
         {cover ? <img src={cover} alt={event.name} loading="lazy" draggable={false} /> : <CalendarDays size={40} strokeWidth={1.5} />}
         <div className="event-status"><Badge tone={TONE[event.status]}>{EVENT_STATUS[event.status]}</Badge></div>
         <div className="event-date">
-          <span>{new Intl.DateTimeFormat('es-CO', { day: '2-digit' }).format(date)}</span>
-          <small>{new Intl.DateTimeFormat('es-CO', { month: 'short' }).format(date).replace('.', '')}</small>
+          <span>{new Intl.DateTimeFormat('es-BO', { day: '2-digit' }).format(date)}</span>
+          <small>{new Intl.DateTimeFormat('es-BO', { month: 'short' }).format(date).replace('.', '')}</small>
         </div>
       </div>
 

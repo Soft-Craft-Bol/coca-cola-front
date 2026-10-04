@@ -5,6 +5,7 @@ import Pagination from '@/shared/components/Pagination'
 import { Badge, Card, ErrorBox, Field, Loading, PageHeader } from '@/shared/components/ui'
 import { useToast } from '@/shared/components/Toast'
 import { ACTIVITY_TYPES, INTERACTION_TYPES } from '@/shared/constants'
+import { useExperiences } from '@/features/events/hooks/useEvents'
 import { useSelectedEvent } from '@/shared/hooks/useSelectedEvent'
 import { formatDateTime } from '@/shared/utils/format'
 import { useAuth } from '@/features/auth/hooks/useAuth'
@@ -24,7 +25,9 @@ export default function ActivitiesPage() {
   const historyPg = usePagination(interactions ?? [])
   const activitiesPg = usePagination(activities ?? [], 5)
   const [tab, setTab] = useState('registrar')
-  const [newAct, setNewAct] = useState<{ name: string; type: ActivityType }>({ name: '', type: 'tasting' })
+  const { data: allExperiences } = useExperiences()
+  const eventExperiences = (allExperiences ?? []).filter((x) => event?.experienceIds?.includes(x.id))
+  const [newAct, setNewAct] = useState<{ name: string; type: ActivityType; experienceId: string }>({ name: '', type: 'tasting', experienceId: '' })
 
   const attendees = participants?.filter((p) => p.checkedInAt) ?? []
   const nameOf = (id: string) => {
@@ -41,8 +44,8 @@ export default function ActivitiesPage() {
 
   const addActivity = async (e: FormEvent) => {
     e.preventDefault()
-    await activityService.create({ ...newAct, eventId })
-    setNewAct({ name: '', type: 'tasting' })
+    await activityService.create({ name: newAct.name, type: newAct.type, eventId, experienceId: newAct.experienceId || null })
+    setNewAct({ name: '', type: 'tasting', experienceId: '' })
     toast.success('Actividad creada')
     reloadActs()
   }
@@ -115,7 +118,7 @@ export default function ActivitiesPage() {
           <Card title="Actividades">
             {activitiesPg.pageItems.map((a) => (
               <div key={a.id} className="row spread" style={{ padding: '8px 0', borderBottom: '1px solid #f0f0f1' }}>
-                <span><strong>{a.name}</strong> <span className="muted">· {ACTIVITY_TYPES[a.type]}</span></span>
+                <span><strong>{a.name}</strong> <span className="muted">· {ACTIVITY_TYPES[a.type]}{a.experienceId ? ` · ${allExperiences?.find((x) => x.id === a.experienceId)?.name ?? ''}` : ''}</span></span>
                 {can('admin', 'organizer') && <button className="btn small danger" onClick={() => removeActivity(a)}>Eliminar</button>}
               </div>
             ))}
@@ -125,6 +128,16 @@ export default function ActivitiesPage() {
           {can('admin', 'organizer') && (
             <Card title="Nueva actividad">
               <form className="stack" onSubmit={addActivity}>
+                <Field label="Experiencia destacada" hint="(opcional, del catálogo del evento)">
+                  <select value={newAct.experienceId} onChange={(e) => {
+                    const exp = eventExperiences.find((x) => x.id === e.target.value)
+                    const type = exp ? (Object.entries(ACTIVITY_TYPES).find(([, label]) => label === exp.category)?.[0] as ActivityType | undefined) : undefined
+                    setNewAct({ ...newAct, experienceId: e.target.value, name: newAct.name || exp?.name || '', type: type ?? newAct.type })
+                  }}>
+                    <option value="">Ninguna</option>
+                    {eventExperiences.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
+                  </select>
+                </Field>
                 <Field label="Nombre"><input required value={newAct.name} onChange={(e) => setNewAct({ ...newAct, name: e.target.value })} /></Field>
                 <Field label="Tipo">
                   <select value={newAct.type} onChange={(e) => setNewAct({ ...newAct, type: e.target.value as ActivityType })}>

@@ -20,6 +20,7 @@ const PowerBiPage = lazy(() => import('@/features/powerbi/pages/PowerBiPage'))
 const InsightsPage = lazy(() => import('@/features/insights/pages/InsightsPage'))
 const CommunicationsPage = lazy(() => import('@/features/communications/pages/CommunicationsPage'))
 const PublicSurveyPage = lazy(() => import('@/features/communications/pages/PublicSurveyPage'))
+const CatalogPage = lazy(() => import('@/features/catalog/pages/CatalogPage'))
 const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'))
 
 export default function AppRoutes() {
@@ -51,6 +52,7 @@ export default function AppRoutes() {
             <Route path="/comunicaciones" element={<CommunicationsPage />} />
           </Route>
           <Route element={<ProtectedRoute roles={['admin']} />}>
+            <Route path="/catalogos" element={<CatalogPage />} />
             <Route path="/usuarios" element={<UsersPage />} />
           </Route>
         </Route>

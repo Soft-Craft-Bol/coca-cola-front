@@ -4,6 +4,7 @@ import { Badge, Card, ErrorBox, Loading } from '@/shared/components/ui'
 import { useAsync } from '@/shared/hooks/useAsync'
 import type { InsightSummary } from '@/shared/types'
 import { insightsService } from '../services/insightsService'
+import NarrateButton from './NarrateButton'
 
 // Resumen ejecutivo en lenguaje natural: automático y, si hay clave de Claude en el backend, redactado con IA
 export default function SummaryTab({ eventId }: { eventId: string }) {
@@ -30,7 +31,7 @@ export default function SummaryTab({ eventId }: { eventId: string }) {
 
   return (
     <div className="stack">
-      <Card title={data.title} actions={<Badge tone="green">Resumen automático</Badge>}>
+      <Card title={data.title} actions={<span className="row"><NarrateButton text={`${data.title}. ${data.text}`} /><Badge tone="green">Resumen automático</Badge></span>}>
         <p style={{ fontSize: 16, lineHeight: 1.7, margin: 0 }}>{data.text}</p>
       </Card>
 
@@ -40,11 +41,16 @@ export default function SummaryTab({ eventId }: { eventId: string }) {
       >
         <ErrorBox error={aiError} />
         {!shown && <p className="muted" style={{ margin: 0 }}>La IA redacta un resumen ejecutivo y tres acciones para la próxima activación a partir de los datos reales del evento (sin datos personales).</p>}
-        {shown && shown.aiSource !== 'local' && <div className="ai-text">{shown.ai}</div>}
+        {shown && shown.aiSource !== 'local' && (
+          <>
+            <div style={{ marginBottom: 10 }}><NarrateButton text={shown.ai ?? ''} label="Narrar el análisis" /></div>
+            <div className="ai-text">{shown.ai}</div>
+          </>
+        )}
         {shown && shown.aiSource === 'local' && (
           <div className="ok-box" style={{ background: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}>
             La IA no está configurada o no respondió. Configura una en el backend: <code>ai.openai.api-key</code> (OpenCode Zen tiene modelos gratis)
-            o <code>ai.anthropic.api-key</code> (Claude). Mientras tanto se usa el resumen automático de arriba.
+            u OpenAI (<code>AI_API_KEY</code>). Mientras tanto se usa el resumen automático de arriba.
           </div>
         )}
       </Card>

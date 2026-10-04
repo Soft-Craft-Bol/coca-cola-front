@@ -2,6 +2,7 @@ import { Badge, Card, ErrorBox, KpiCard, Loading, ProgressBar } from '@/shared/c
 import { DonutChart } from '@/shared/components/charts'
 import { useAsync } from '@/shared/hooks/useAsync'
 import { insightsService } from '../services/insightsService'
+import PredictionAnalysis from './PredictionAnalysis'
 
 const TONE = { Alta: 'green', Media: 'amber', Baja: '' } as const
 
@@ -13,6 +14,7 @@ export default function AffinityTab({ eventId }: { eventId: string }) {
 
   return (
     <div className="stack">
+      <PredictionAnalysis eventId={eventId || undefined} />
       <div className="grid cols-3">
         <KpiCard label="Afinidad promedio" value={`${data.averageScore.toFixed(0)} / 100`} accent />
         {data.distribution.map((d) => <KpiCard key={d.name} label={`Afinidad ${d.name.toLowerCase()}`} value={d.value} />)}

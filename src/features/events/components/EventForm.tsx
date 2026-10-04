@@ -73,7 +73,7 @@ export default function EventForm({ initial, onSubmit, onCancel }: Props) {
           <datalist id="campaigns">{CAMPAIGNS.map((c) => <option key={c} value={c} />)}</datalist>
         </Field>
         <Field label="Canal o aliado responsable"><input value={form.channel} onChange={set('channel')} /></Field>
-        <Field label="Presupuesto (COP)"><input type="number" min="0" value={form.budget} onChange={num('budget')} /></Field>
+        <Field label="Presupuesto (Bs)"><input type="number" min="0" value={form.budget} onChange={num('budget')} /></Field>
         <Field label="Participantes esperados"><input type="number" min="0" value={form.expected} onChange={num('expected')} /></Field>
         <Field label="Descripción" className="full"><textarea rows={2} value={form.description} onChange={set('description')} /></Field>
         <Field label="Objetivo" className="full"><textarea rows={2} value={form.objective} onChange={set('objective')} /></Field>

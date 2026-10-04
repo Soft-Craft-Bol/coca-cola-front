@@ -49,7 +49,7 @@ export const INTERACTION_TYPES: Record<InteractionType, string> = {
 
 export const AGE_RANGES = ['18-24', '25-34', '35-44', '45-54', '55+']
 
-export const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Cartagena', 'Bucaramanga']
+export const CITIES = ['Cochabamba', 'Quillacollo', 'Sacaba', 'Tiquipaya', 'Colcapirhua', 'Vinto', 'Sipe Sipe', 'Santa Cruz de la Sierra', 'La Paz', 'Sucre', 'Oruro', 'Tarija', 'Potosí']
 
 export const SOURCES = ['Código QR', 'Formulario web', 'Tablet en sitio', 'Aplicación móvil', 'Preinscripción web']
 

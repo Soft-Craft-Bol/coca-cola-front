@@ -38,7 +38,7 @@ export default function MyTicketPage() {
               Escribe el correo o el celular con el que te inscribiste y te mostramos tu entrada con el código QR.
             </p>
             <Field label="Correo o celular">
-              <input required placeholder="tucorreo@ejemplo.com o 3001234567" value={contact} onChange={(e) => setContact(e.target.value)} />
+              <input required placeholder="tucorreo@ejemplo.com o 71234567" value={contact} onChange={(e) => setContact(e.target.value)} />
             </Field>
             <ErrorBox error={error} />
             <button className="btn primary icon-inline" disabled={busy}><Search size={15} /> {busy ? 'Buscando…' : 'Buscar mi entrada'}</button>

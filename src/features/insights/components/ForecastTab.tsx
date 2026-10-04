@@ -2,6 +2,7 @@ import { Badge, Card, ErrorBox, KpiCard, Loading, ProgressBar } from '@/shared/c
 import { BarsChart } from '@/shared/components/charts'
 import { useAsync } from '@/shared/hooks/useAsync'
 import { insightsService } from '../services/insightsService'
+import PredictionAnalysis from './PredictionAnalysis'
 
 // Predicción de asistencia para los eventos próximos o en curso, con la asistencia histórica por fuente de registro
 export default function ForecastTab() {
@@ -12,6 +13,7 @@ export default function ForecastTab() {
 
   return (
     <div className="stack">
+      <PredictionAnalysis />
       {data.map((f) => (
         <Card key={f.eventId} title={f.eventName} actions={<Badge tone={f.status === 'active' ? 'green' : 'amber'}>{f.status === 'active' ? 'En curso' : 'Planificado'}</Badge>}>
           {f.expectedAttendees == null ? <p className="muted">{f.note}</p> : (

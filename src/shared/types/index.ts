@@ -315,6 +315,9 @@ export interface CriterionScore {
 
 export interface EventMetrics {
   experienceInterest: ExperienceInterest[]
+  interestByCategory: NamedValue[]
+  interestByFlavor: NamedValue[]
+  interestByPresentation: NamedValue[]
   event: CcEvent
   registered: number
   attended: number
@@ -373,6 +376,9 @@ export interface EvolutionPoint {
 
 export interface OverviewMetrics {
   experienceInterest: ExperienceInterest[]
+  interestByCategory: NamedValue[]
+  interestByFlavor: NamedValue[]
+  interestByPresentation: NamedValue[]
   events: number
   registered: number
   attended: number

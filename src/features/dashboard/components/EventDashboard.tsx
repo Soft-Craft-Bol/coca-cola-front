@@ -2,6 +2,8 @@ import type { EventMetrics } from '@/shared/types'
 import { Card, KpiCard, ProgressBar } from '@/shared/components/ui'
 import { BarsChart, DonutChart } from '@/shared/components/charts'
 import AttendeesMap from '@/shared/components/AttendeesMap'
+import ExperiencesCard from './ExperiencesCard'
+import InterestCard from './InterestCard'
 import { SURVEY_CRITERIA } from '@/shared/constants'
 import { formatNumber, formatPercent } from '@/shared/utils/format'
 
@@ -39,12 +41,12 @@ export default function EventDashboard({ m }: { m: EventMetrics }) {
         <Card title="Nuevos vs. recurrentes">
           <DonutChart data={[{ name: 'Nuevos', value: m.newCount }, { name: 'Recurrentes', value: m.returningCount }]} />
         </Card>
-        <Card title="Productos con mayor interés">
-          <BarsChart horizontal data={m.productInterest} seriesName="Personas interesadas" />
-        </Card>
+        <InterestCard title="Productos con mayor interés" products={m.productInterest} byFlavor={m.interestByFlavor}
+          byPresentation={m.interestByPresentation} byCategory={m.interestByCategory} total={m.registered} />
         <Card title="Actividades con mayor participación">
           <BarsChart horizontal data={m.activityPerformance} seriesName="Participantes" />
         </Card>
+        <ExperiencesCard data={m.experienceInterest} />
         <Card title="Horarios de mayor afluencia (ingresos)">
           <BarsChart data={m.hourly} seriesName="Ingresos" />
         </Card>

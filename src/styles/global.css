@@ -371,3 +371,17 @@ code { background: #f3f4f6; padding: 1px 6px; border-radius: 5px; font-size: 12.
 .ticket-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .ticket-canvas { width: 100%; max-width: 380px; height: auto; border-radius: 18px; box-shadow: 0 18px 44px rgba(120, 10, 20, 0.35); transition: opacity 0.2s; }
 .ticket-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+/* ---------- Catálogos ---------- */
+.search-box { position: relative; display: flex; align-items: center; }
+.search-box svg { position: absolute; left: 10px; color: var(--muted); }
+.search-box input { padding-left: 32px; min-width: 220px; }
+
+/* ---------- Asistente de datos ---------- */
+.chat-box { display: flex; flex-direction: column; gap: 12px; min-height: 240px; max-height: 480px; overflow-y: auto; padding: 4px 2px; }
+.chat-msg { display: flex; gap: 10px; align-items: flex-start; }
+.chat-msg.user { flex-direction: row-reverse; }
+.chat-avatar { width: 28px; height: 28px; border-radius: 50%; background: #f3f4f6; display: grid; place-items: center; flex: none; }
+.chat-msg.assistant .chat-avatar { background: #fee2e2; color: #e61a27; }
+.chat-bubble { max-width: 80%; white-space: pre-wrap; line-height: 1.6; font-size: 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 10px 14px; }
+.chat-msg.user .chat-bubble { background: #e61a27; border-color: #e61a27; color: #fff; }

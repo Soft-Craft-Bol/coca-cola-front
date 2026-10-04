@@ -31,7 +31,7 @@ const CSV_COLUMNS: CsvColumn<Participant>[] = [
 // Enlace "click to chat" de WhatsApp (no requiere API): abre la conversación con el mensaje listo
 const whatsappLink = (p: Participant, eventName = 'el evento') => {
   const digits = p.phone.replace(/\D/g, '')
-  const phone = digits.length === 10 ? `57${digits}` : digits
+  const phone = digits.length === 8 ? `591${digits}` : digits
   const text = `Hola ${p.firstName}, tu código de ingreso para ${eventName} es ${p.qrCode}. Preséntalo en la entrada.`
   return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`
 }

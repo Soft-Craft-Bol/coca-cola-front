@@ -1,3 +1,5 @@
+import { queryClient } from './queryClient'
+
 const BASE_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api'
 export const API_URL = BASE_URL
 const TOKEN_KEY = 'cc_token'
@@ -46,6 +48,7 @@ async function request<T>(method: string, url: string, body?: unknown): Promise<
     const message = (data as { message?: string } | null)?.message ?? `Error ${res.status}`
     throw new ApiError(message, res.status)
   }
+  if (method !== 'GET') void queryClient.invalidateQueries({ refetchType: 'none' })
   return data as T
 }
 
@@ -63,6 +66,27 @@ async function download(url: string, filename: string): Promise<void> {
   a.download = filename
   a.click()
   URL.revokeObjectURL(href)
+}
+
+/** Pide audio (MP3) al servidor para un texto; devuelve null si el servidor no tiene voz configurada. */
+async function audio(url: string, body: unknown): Promise<Blob | null> {
+  const token = tokenStorage.get()
+  let res: Response
+  try {
+    res = await fetch(`${BASE_URL}${url}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      body: JSON.stringify(body),
+    })
+  } catch {
+    throw new ApiError('No se pudo conectar con el servidor', 0)
+  }
+  if (res.status === 503) return null
+  if (!res.ok) {
+    const data = (await res.json().catch(() => null)) as { message?: string } | null
+    throw new ApiError(data?.message ?? `Error ${res.status}`, res.status)
+  }
+  return res.blob()
 }
 
 // Cliente HTTP único de la app (backend Spring Boot). Configura VITE_API_URL en .env
@@ -83,4 +107,5 @@ export const api = {
   upload: <T>(url: string, formData: FormData) => request<T>('POST', url, formData),
   delete: <T = { ok: boolean }>(url: string) => request<T>('DELETE', url),
   download,
+  audio,
 }

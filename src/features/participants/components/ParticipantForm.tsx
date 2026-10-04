@@ -3,6 +3,7 @@ import type { CcEvent, ParticipantInput } from '@/shared/types'
 import { ErrorBox, Field } from '@/shared/components/ui'
 import { AGE_RANGES, CITIES, SOURCES } from '@/shared/constants'
 import { useProducts } from '@/features/events/hooks/useEvents'
+import { productLabel } from '@/shared/utils/catalog'
 
 // Formulario único de registro (uso interno y página pública)
 interface Props {
@@ -63,7 +64,7 @@ export default function ParticipantForm({ event, defaultSource = SOURCES[2], onS
             <div className="chips">
               {eventProducts.map((p) => (
                 <button type="button" key={p.id} className={`chip ${form.preferences.includes(p.id) ? 'on' : ''}`} onClick={() => togglePref(p.id)}>
-                  {p.name}
+                  {productLabel(p)}
                 </button>
               ))}
             </div>

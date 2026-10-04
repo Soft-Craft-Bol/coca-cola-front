@@ -4,6 +4,8 @@ import type { OverviewMetrics } from '@/shared/types'
 import { Card, KpiCard } from '@/shared/components/ui'
 import { BarsChart, DonutChart, GroupedBars, MultiLineChart } from '@/shared/components/charts'
 import AttendeesMap from '@/shared/components/AttendeesMap'
+import ExperiencesCard from './ExperiencesCard'
+import InterestCard from './InterestCard'
 import { formatNumber, formatPercent } from '@/shared/utils/format'
 
 const SERIES: Record<string, string> = {
@@ -80,7 +82,9 @@ export function PerformancePage({ o }: { o: OverviewMetrics }) {
 export function ProductCampaignPage({ o }: { o: OverviewMetrics }) {
   return (
     <div className="grid cols-2">
-      <Card title="Productos o sabores con mayor interés"><BarsChart horizontal data={o.productInterest} seriesName="Personas interesadas" /></Card>
+      <InterestCard title="Productos, sabores y presentaciones con mayor interés" products={o.productInterest} byFlavor={o.interestByFlavor}
+        byPresentation={o.interestByPresentation} byCategory={o.interestByCategory} total={o.registered} />
+      <ExperiencesCard data={o.experienceInterest} />
       <Card title="Participantes por campaña"><DonutChart data={o.byCampaign} /></Card>
       <Card title="Conversiones y canjes por evento" className="">
         <GroupedBars data={o.perEvent} keys={['conversions', 'redemptions']} labels={SERIES} />

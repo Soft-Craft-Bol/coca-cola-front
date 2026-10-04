@@ -6,14 +6,28 @@
 -- =====================================================================
 
 CREATE OR REPLACE VIEW bi_productos AS
-SELECT p.id AS producto_id, p.name AS producto, p.category AS categoria
+SELECT p.id AS producto_id,
+       p.name AS producto_base,
+       concat_ws(' · ', p.name, nullif(p.flavor, ''), nullif(p.presentation, '')) AS producto,
+       p.category AS categoria,
+       COALESCE(p.flavor, '') AS sabor,
+       COALESCE(p.presentation, '') AS presentacion,
+       CASE WHEN p.archived THEN 'Archivado' ELSE 'Activo' END AS estado
 FROM products p;
+
+CREATE OR REPLACE VIEW bi_experiencias AS
+SELECT x.id AS experiencia_id,
+       x.name AS experiencia,
+       x.category AS categoria,
+       COALESCE(x.description, '') AS descripcion,
+       CASE WHEN x.archived THEN 'Archivada' ELSE 'Activa' END AS estado
+FROM experiences x;
 
 CREATE OR REPLACE VIEW bi_eventos AS
 SELECT e.id AS evento_id,
        e.name AS nombre,
        e.type AS tipo,
-       (e.event_date AT TIME ZONE 'America/Bogota')::date AS fecha,
+       (e.event_date AT TIME ZONE 'America/La_Paz')::date AS fecha,
        e.location AS lugar,
        e.organizer AS organizador,
        e.manager AS responsable,
@@ -22,15 +36,20 @@ SELECT e.id AS evento_id,
        e.expected AS esperados,
        e.channel AS canal,
        CASE e.status WHEN 'PLANNED' THEN 'Planificado' WHEN 'ACTIVE' THEN 'En curso' WHEN 'FINISHED' THEN 'Finalizado' END AS estado,
-       COALESCE((SELECT string_agg(p.name, ', ' ORDER BY p.name)
+       COALESCE((SELECT string_agg(concat_ws(' · ', p.name, nullif(p.flavor, ''), nullif(p.presentation, '')), ', ' ORDER BY p.name)
                  FROM event_products ep JOIN products p ON p.id = ep.product_id
-                 WHERE ep.event_id = e.id), '') AS productos_destacados
+                 WHERE ep.event_id = e.id), '') AS productos_destacados,
+       COALESCE((SELECT string_agg(x.name, ', ' ORDER BY x.name)
+                 FROM event_experiences ee JOIN experiences x ON x.id = ee.experience_id
+                 WHERE ee.event_id = e.id), '') AS experiencias_destacadas
 FROM events e;
 
 CREATE OR REPLACE VIEW bi_actividades AS
 SELECT a.id AS actividad_id,
        a.event_id AS evento_id,
        a.name AS actividad,
+       a.experience_id AS experiencia_id,
+       COALESCE(xa.name, '') AS experiencia,
        CASE a.type
             WHEN 'TASTING' THEN 'Degustación o muestra'
             WHEN 'EXPERIENCE' THEN 'Experiencia de producto'
@@ -41,7 +60,8 @@ SELECT a.id AS actividad_id,
             WHEN 'REDEEM' THEN 'Canje de beneficio o cupón'
             WHEN 'CONTENT' THEN 'Interacción con contenido de marca'
        END AS tipo_actividad
-FROM activities a;
+FROM activities a
+LEFT JOIN experiences xa ON xa.id = a.experience_id;
 
 CREATE OR REPLACE VIEW bi_participantes AS
 SELECT p.id AS participante_id,
@@ -53,9 +73,9 @@ SELECT p.id AS participante_id,
        CASE WHEN p.consent THEN 'Sí' ELSE 'No' END AS consentimiento,
        p.source AS fuente_registro,
        p.campaign AS campana,
-       p.registered_at AT TIME ZONE 'America/Bogota' AS fecha_registro,
-       p.checked_in_at AT TIME ZONE 'America/Bogota' AS fecha_ingreso,
-       p.checked_out_at AT TIME ZONE 'America/Bogota' AS fecha_salida,
+       p.registered_at AT TIME ZONE 'America/La_Paz' AS fecha_registro,
+       p.checked_in_at AT TIME ZONE 'America/La_Paz' AS fecha_ingreso,
+       p.checked_out_at AT TIME ZONE 'America/La_Paz' AS fecha_salida,
        CASE WHEN p.checked_in_at IS NOT NULL THEN 'Sí' ELSE 'No' END AS asistio,
        round((extract(epoch FROM (p.checked_out_at - p.checked_in_at)) / 60.0)::numeric, 1) AS permanencia_min,
        nv.n AS nivel_interaccion,
@@ -88,13 +108,16 @@ SELECT i.id AS interaccion_id,
        CASE i.type WHEN 'ACTIVITY' THEN 'Participación' WHEN 'TASTING' THEN 'Degustación'
                    WHEN 'REDEEM' THEN 'Canje' WHEN 'CONVERSION' THEN 'Conversión' END AS tipo,
        i.product_id AS producto_id,
-       COALESCE(pr.name, '') AS producto,
+       concat_ws(' · ', pr.name, nullif(pr.flavor, ''), nullif(pr.presentation, '')) AS producto,
+       COALESCE(pr.category, '') AS categoria,
+       COALESCE(pr.flavor, '') AS sabor,
+       COALESCE(pr.presentation, '') AS presentacion,
        i.rating AS calificacion,
        CASE i.would_buy WHEN TRUE THEN 'Sí' WHEN FALSE THEN 'No' ELSE '' END AS compraria,
        CASE i.wants_promos WHEN TRUE THEN 'Sí' WHEN FALSE THEN 'No' ELSE '' END AS quiere_promociones,
-       i.occurred_at AT TIME ZONE 'America/Bogota' AS fecha_hora,
-       (i.occurred_at AT TIME ZONE 'America/Bogota')::date AS fecha,
-       extract(hour FROM i.occurred_at AT TIME ZONE 'America/Bogota')::int AS hora
+       i.occurred_at AT TIME ZONE 'America/La_Paz' AS fecha_hora,
+       (i.occurred_at AT TIME ZONE 'America/La_Paz')::date AS fecha,
+       extract(hour FROM i.occurred_at AT TIME ZONE 'America/La_Paz')::int AS hora
 FROM interactions i
 LEFT JOIN activities a ON a.id = i.activity_id
 LEFT JOIN products pr ON pr.id = i.product_id;
@@ -111,5 +134,5 @@ SELECT s.id AS encuesta_id,
        round(((s.organization + s.service + s.experiences + s.products + s.overall) / 5.0)::numeric, 2) AS satisfaccion_promedio,
        s.nps AS nps,
        CASE WHEN s.nps >= 9 THEN 'Promotor' WHEN s.nps >= 7 THEN 'Pasivo' ELSE 'Detractor' END AS categoria_nps,
-       s.created_at AT TIME ZONE 'America/Bogota' AS fecha
+       s.created_at AT TIME ZONE 'America/La_Paz' AS fecha
 FROM surveys s;

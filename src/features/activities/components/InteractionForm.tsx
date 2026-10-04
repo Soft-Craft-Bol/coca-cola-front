@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react'
 import type { Activity, CcEvent, InteractionInput, Participant } from '@/shared/types'
 import { ErrorBox, Field, Stars } from '@/shared/components/ui'
 import { useProducts } from '@/features/events/hooks/useEvents'
+import { productLabel } from '@/shared/utils/catalog'
 
 // Registra la interacción de un asistente con una actividad (participación, degustación, canje, conversión)
 interface Props {
@@ -87,7 +88,7 @@ export default function InteractionForm({ event, activities, attendees, onSubmit
           <Field label="Producto o sabor probado">
             <select required value={productId} onChange={(e) => setProductId(e.target.value)}>
               <option value="">Selecciona…</option>
-              {eventProducts.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              {eventProducts.map((p) => <option key={p.id} value={p.id}>{productLabel(p)}</option>)}
             </select>
           </Field>
           <Field label="¿Cómo calificaría el producto?"><Stars value={rating} onChange={setRating} /></Field>
