@@ -10,9 +10,11 @@ interface Props {
   activities: Activity[]
   attendees: Participant[]
   onSubmit: (data: InteractionInput) => Promise<void>
+  // El canje se hace con el código de un cupón del participante
+  onRedeem: (data: { eventId: string; participantId: string; activityId: string; code: string }) => Promise<void>
 }
 
-export default function InteractionForm({ event, activities, attendees, onSubmit }: Props) {
+export default function InteractionForm({ event, activities, attendees, onSubmit, onRedeem }: Props) {
   const { data: products } = useProducts()
   const [participantId, setParticipantId] = useState('')
   const [activityId, setActivityId] = useState('')
@@ -20,6 +22,7 @@ export default function InteractionForm({ event, activities, attendees, onSubmit
   const [productId, setProductId] = useState('')
   const [rating, setRating] = useState(0)
   const [wouldBuy, setWouldBuy] = useState(true)
+  const [code, setCode] = useState('')
   const [convert, setConvert] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
@@ -40,7 +43,7 @@ export default function InteractionForm({ event, activities, attendees, onSubmit
       if (activity.type === 'tasting') {
         await onSubmit({ ...base, type: 'tasting', productId, rating, wouldBuy, wantsPromos: participant?.consent ?? false })
       } else if (activity.type === 'redeem') {
-        await onSubmit({ ...base, type: 'redeem' })
+        await onRedeem({ eventId: event.id, participantId, activityId, code: code.trim() })
         if (convert) await onSubmit({ ...base, type: 'conversion' })
       } else {
         await onSubmit({ ...base, type: 'activity' })
@@ -49,6 +52,7 @@ export default function InteractionForm({ event, activities, attendees, onSubmit
       setSearch('')
       setRating(0)
       setProductId('')
+      setCode('')
       setConvert(false)
     } catch (err) {
       setError(err as Error)
@@ -96,10 +100,17 @@ export default function InteractionForm({ event, activities, attendees, onSubmit
         </>
       )}
       {activity?.type === 'redeem' && (
-        <label className="check"><input type="checkbox" checked={convert} onChange={(e) => setConvert(e.target.checked)} /> Cumplió la acción objetivo de la campaña (conversión)</label>
+        <>
+          <Field label="Código del cupón" hint="(el que recibió el participante)">
+            <input required placeholder="Ej.: 3FA9C2B1" value={code} onChange={(e) => setCode(e.target.value)} />
+          </Field>
+          <label className="check"><input type="checkbox" checked={convert} onChange={(e) => setConvert(e.target.checked)} /> Cumplió la acción objetivo de la campaña (conversión)</label>
+        </>
       )}
 
-      <button className="btn primary" disabled={!participantId || !activityId || (activity?.type === 'tasting' && !rating)}>Registrar interacción</button>
+      <button className="btn primary" disabled={!participantId || !activityId || (activity?.type === 'tasting' && !rating) || (activity?.type === 'redeem' && !code.trim())}>
+        {activity?.type === 'redeem' ? 'Canjear cupón' : 'Registrar interacción'}
+      </button>
     </form>
   )
 }

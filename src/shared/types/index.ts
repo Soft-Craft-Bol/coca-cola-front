@@ -123,6 +123,39 @@ export interface Interaction {
 
 export type InteractionInput = Omit<Interaction, 'id' | 'at'>
 
+export type CouponStatus = 'issued' | 'redeemed' | 'expired'
+
+export interface Coupon {
+  id: string
+  eventId: string
+  participantId: string
+  participantName: string | null
+  participantEmail: string | null
+  consent: boolean
+  code: string
+  benefit: string
+  status: CouponStatus
+  validUntil: string | null
+  issuedAt: string
+  redeemedAt: string | null
+  redeemActivityId: string | null
+  redeemInteractionId: string | null
+}
+
+export interface CouponIssueInput {
+  eventId: string
+  participantId: string
+  benefit: string
+  validUntil?: string | null
+}
+
+export interface CouponRedeemInput {
+  eventId: string
+  participantId: string
+  code: string
+  activityId?: string | null
+}
+
 export interface Survey {
   id: string
   eventId: string

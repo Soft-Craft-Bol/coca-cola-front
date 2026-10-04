@@ -14,6 +14,7 @@ const MyTicketPage = lazy(() => import('@/features/participants/pages/MyTicketPa
 const TicketPage = lazy(() => import('@/features/participants/pages/TicketPage'))
 const CheckinPage = lazy(() => import('@/features/checkin/pages/CheckinPage'))
 const ActivitiesPage = lazy(() => import('@/features/activities/pages/ActivitiesPage'))
+const CouponsPage = lazy(() => import('@/features/coupons/pages/CouponsPage'))
 const SurveysPage = lazy(() => import('@/features/surveys/pages/SurveysPage'))
 const ReportsPage = lazy(() => import('@/features/reports/pages/ReportsPage'))
 const PowerBiPage = lazy(() => import('@/features/powerbi/pages/PowerBiPage'))
@@ -39,6 +40,7 @@ export default function AppRoutes() {
           <Route path="/eventos" element={<EventsPage />} />
           <Route path="/eventos/:id" element={<EventDetailPage />} />
           <Route path="/participantes" element={<ParticipantsPage />} />
+          <Route path="/cupones" element={<CouponsPage />} />
 
           <Route element={<ProtectedRoute roles={['admin', 'organizer']} />}>
             <Route path="/checkin" element={<CheckinPage />} />
