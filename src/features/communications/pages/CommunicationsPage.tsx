@@ -42,6 +42,8 @@ export default function CommunicationsPage() {
   const [result, setResult] = useState<SendResult | null>(null)
   const [error, setError] = useState<Error | null>(null)
   const [crmResult, setCrmResult] = useState<string | null>(null)
+  const [testTo, setTestTo] = useState('')
+  const [testing, setTesting] = useState(false)
 
   const names = useMemo(() => new Map((participants ?? []).map((p) => [p.id, `${p.firstName} ${p.lastName}`])), [participants])
   const pg = usePagination(log.data ?? [], 8)
@@ -74,6 +76,18 @@ export default function CommunicationsPage() {
     }
   }
 
+  const testEmail = async () => {
+    setTesting(true)
+    try {
+      const r = await communicationService.testEmail(testTo.trim() || undefined)
+      toast.success(`Correo de prueba enviado a ${r.to}`)
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally {
+      setTesting(false)
+    }
+  }
+
   const download = async () => {
     try { await communicationService.crmCsv(eventId) } catch (e) { toast.error((e as Error).message) }
   }
@@ -95,13 +109,22 @@ export default function CommunicationsPage() {
       <ErrorBox error={status.error} />
 
       <div className="grid cols-4" style={{ marginBottom: 16 }}>
-        {channelCard('Correo', <Mail size={20} />, status.data?.email, 'Define spring.mail.host y las credenciales SMTP.')}
+        {channelCard('Correo (Gmail)', <Mail size={20} />, status.data?.email, 'Define MAIL_USERNAME y MAIL_PASSWORD (contraseña de aplicación de Gmail). Ver docs/INTEGRACIONES.md.')}
         {channelCard('WhatsApp', <MessageCircle size={20} />, status.data?.whatsapp, 'Define whatsapp.token y whatsapp.phone-number-id. Mientras tanto usa el botón de WhatsApp en Participantes.')}
         {channelCard('CRM', <Users size={20} />, status.data?.crm, 'Define crm.webhook-url (HubSpot, Zapier, Make…). Puedes descargar el CSV sin configurarlo.')}
-        {channelCard('IA (Claude)', <Sparkles size={20} />, status.data?.ai, 'Define ai.anthropic.api-key. Sin ella se usa el resumen automático.')}
+        {channelCard('Inteligencia artificial', <Sparkles size={20} />, status.data?.ai, 'Define ai.openai.api-key (OpenCode Zen es gratis) o ai.anthropic.api-key. Sin ellas se usa el resumen automático.')}
       </div>
 
-      <div className="grid cols-2">
+      {status.data?.email && (
+        <Card title="Probar el correo" className="">
+          <div className="row">
+            <input type="email" placeholder="Correo de destino (vacío = destinatarios de notificaciones)" value={testTo} onChange={(e) => setTestTo(e.target.value)} style={{ flex: 1, minWidth: 260 }} />
+            <button className="btn icon-inline" disabled={testing} onClick={testEmail}><Mail size={15} /> {testing ? 'Enviando…' : 'Enviar correo de prueba'}</button>
+          </div>
+        </Card>
+      )}
+
+      <div className="grid cols-2" style={{ marginTop: 16 }}>
         <Card title="Enviar comunicación">
           <div className="stack">
             <Field label="Tipo de mensaje">

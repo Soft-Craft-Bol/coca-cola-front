@@ -9,7 +9,8 @@ export function useSelectedEvent(prefer = 'active') {
   const setEventId = useEventStore((s) => s.setEventId)
 
   useEffect(() => {
-    if (!events?.length) return
+    if (!events) return
+    if (!events.length) { if (eventId) setEventId(''); return }
     if (!events.some((e) => e.id === eventId)) {
       setEventId((events.find((e) => e.status === prefer) ?? events[0]).id)
     }

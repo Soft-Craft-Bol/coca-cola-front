@@ -3,6 +3,7 @@ import type { IntegrationStatus, MessageLog, SendCommunication, SendResult } fro
 
 export const communicationService = {
   status: () => api.get<IntegrationStatus>('/integrations/status'),
+  testEmail: (to?: string) => api.post<{ to: string }>(`/integrations/email/test${to ? `?to=${encodeURIComponent(to)}` : ''}`),
   send: (data: SendCommunication) => api.post<SendResult>('/communications/send', data),
   log: (eventId: string, limit = 50) => api.get<MessageLog[]>(`/communications/log?eventId=${eventId}&limit=${limit}`),
   crmSync: (eventId?: string) => api.post<{ total: number; sent: number; errors: number }>(`/crm/sync${eventId ? `?eventId=${eventId}` : ''}`),

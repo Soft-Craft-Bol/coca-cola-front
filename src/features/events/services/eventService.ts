@@ -1,5 +1,5 @@
 import { api } from '@/shared/services/api'
-import type { CcEvent, EventInput, Product } from '@/shared/types'
+import type { CcEvent, EventInput, Product, Experience } from '@/shared/types'
 
 export const eventService = {
   list: () => api.get<CcEvent[]>('/events'),
@@ -15,4 +15,5 @@ export const eventService = {
   },
   removeImage: (id: string) => api.delete<CcEvent>(`/events/${id}/image`),
   products: () => api.get<Product[]>('/products'),
+  experiences: () => api.get<Experience[]>('/experiences'),
 }

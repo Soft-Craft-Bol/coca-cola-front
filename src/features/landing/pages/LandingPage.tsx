@@ -15,6 +15,7 @@ import DashboardPreview from '../components/DashboardPreview'
 import HeroScene from '../components/HeroScene'
 import Reveal from '../components/Reveal'
 import TiltCard from '../components/TiltCard'
+import UpcomingEvents from '../components/UpcomingEvents'
 import { useParallax } from '../hooks/useParallax'
 
 const FEATURES = [
@@ -63,10 +64,10 @@ export default function LandingPage() {
       <header className={`lp-nav ${scrolled ? 'scrolled' : ''}`}>
         <a href="#inicio" className="lp-brand" aria-label="Coca-Cola"><img src={logoWhite} alt="Coca-Cola" /></a>
         <nav className={open ? 'open' : ''} onClick={() => setOpen(false)}>
+          <a href="#eventos">Eventos</a>
           <a href="#solucion">Solución</a>
           <a href="#como-funciona">Cómo funciona</a>
-          <a href="#panel">Panel</a>
-          <a href="#cifras">Cifras</a>
+          <Link to="/mi-entrada">Mi entrada</Link>
         </nav>
         <Link to={cta.to} className="lp-btn lp-btn-white lp-nav-cta">{cta.label}</Link>
         <button className="lp-burger" onClick={() => setOpen(!open)} aria-label="Abrir menú">{open ? <X size={22} /> : <Menu size={22} />}</button>
@@ -95,8 +96,8 @@ export default function LandingPage() {
               Coca-Cola en indicadores listos para tomar decisiones.
             </p>
             <div className="hero-cta hero-in" style={{ '--i': 3 } as CSSProperties}>
-              <Link to={cta.to} className="lp-btn lp-btn-white">{cta.label} <ArrowRight size={18} /></Link>
-              <a href="#como-funciona" className="lp-btn lp-btn-ghost">Ver cómo funciona</a>
+              <a href="#eventos" className="lp-btn lp-btn-white">Inscribirme a un evento <ArrowRight size={18} /></a>
+              <Link to="/mi-entrada" className="lp-btn lp-btn-ghost">Recuperar mi entrada</Link>
             </div>
             <ul className="hero-points hero-in" style={{ '--i': 4 } as CSSProperties}>
               <li>Antes, durante y después del evento</li>
@@ -116,6 +117,9 @@ export default function LandingPage() {
           ))}
         </div>
       </div>
+
+      {/* ------------------------------------------------ eventos abiertos */}
+      <UpcomingEvents />
 
       {/* ------------------------------------------------ solución */}
       <section id="solucion" className="lp-section">

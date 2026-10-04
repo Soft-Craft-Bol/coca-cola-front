@@ -25,6 +25,17 @@ export interface Product {
   id: string
   name: string
   category: string
+  flavor: string | null
+  presentation: string | null
+  archived: boolean
+}
+
+export interface Experience {
+  id: string
+  name: string
+  category: string
+  description: string
+  archived: boolean
 }
 
 export interface CcEvent {
@@ -42,6 +53,7 @@ export interface CcEvent {
   expected: number
   channel: string
   productIds: string[]
+  experienceIds: string[]
   status: EventStatus
   imageUrl?: string | null
 }
@@ -53,12 +65,14 @@ export interface Activity {
   eventId: string
   name: string
   type: ActivityType
+  experienceId?: string | null
 }
 
 export interface ActivityInput {
   eventId: string
   name: string
   type: ActivityType
+  experienceId?: string | null
 }
 
 export interface Participant {
@@ -123,6 +137,31 @@ export interface Survey {
 }
 
 export type SurveyInput = Omit<Survey, 'id' | 'createdAt'>
+
+// ---- Público (sin sesión) ----
+export interface PublicEvent {
+  id: string
+  name: string
+  type: string
+  date: string
+  location: string
+  description: string | null
+  campaign: string | null
+  imageUrl: string | null
+  status: 'planned' | 'active'
+}
+
+export interface PublicTicket {
+  participantName: string
+  eventId: string
+  eventName: string
+  eventDate: string
+  location: string
+  eventStatus: string
+  qrCode: string
+  attended: boolean
+  registrationType: 'Pre-inscripción' | 'Inscripción'
+}
 
 // ---- Inteligencia ----
 export interface SegmentMember {
@@ -195,7 +234,7 @@ export interface InsightSummary {
   text: string
   recommendations: Recommendation[]
   ai: string | null
-  aiSource: 'local' | 'claude'
+  aiSource: 'local' | 'claude' | 'ia'
 }
 
 // ---- Notificaciones y comunicaciones ----
@@ -267,12 +306,15 @@ export interface ProductInterest {
   pct: number
 }
 
+export interface ExperienceInterest { experienceId: string; name: string; value: number; pct: number }
+
 export interface CriterionScore {
   key: string
   value: number
 }
 
 export interface EventMetrics {
+  experienceInterest: ExperienceInterest[]
   event: CcEvent
   registered: number
   attended: number
@@ -330,6 +372,7 @@ export interface EvolutionPoint {
 }
 
 export interface OverviewMetrics {
+  experienceInterest: ExperienceInterest[]
   events: number
   registered: number
   attended: number

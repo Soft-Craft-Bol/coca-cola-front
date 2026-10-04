@@ -4,11 +4,13 @@ import { ErrorBox, Field } from '@/shared/components/ui'
 import { CAMPAIGNS, EVENT_STATUS, EVENT_TYPES } from '@/shared/constants'
 import { toInputDate } from '@/shared/utils/format'
 import ImageField from './ImageField'
-import { useProducts } from '../hooks/useEvents'
+import { useProducts, useExperiences } from '../hooks/useEvents'
+import { productLabel } from '@/shared/utils/catalog'
+import { Link } from 'react-router-dom'
 
 const EMPTY: EventInput = {
   name: '', type: EVENT_TYPES[0], date: '', location: '', organizer: '', manager: '', description: '', objective: '',
-  campaign: CAMPAIGNS[0], budget: 0, expected: 0, channel: '', productIds: [], status: 'planned',
+  campaign: CAMPAIGNS[0], budget: 0, expected: 0, channel: '', productIds: [], experienceIds: [], status: 'planned',
 }
 
 export type EventFormValues = EventInput & {
@@ -24,13 +26,14 @@ interface Props {
 }
 
 export default function EventForm({ initial, onSubmit, onCancel }: Props) {
-  const { data: products } = useProducts()
+  const { data: products, error: productsError } = useProducts()
+  const { data: experiences, error: experiencesError } = useExperiences()
   const { imageUrl, ...rest } = initial ?? {}
   const [form, setForm] = useState<EventFormValues>({
-    ...EMPTY, ...rest, date: toInputDate(initial?.date), imageFile: null, removeImage: false,
+    ...EMPTY, ...rest, experienceIds: initial?.experienceIds ?? [], date: toInputDate(initial?.date), imageFile: null, removeImage: false,
   })
   const [error, setError] = useState<Error | null>(null)
-  const set = (k: Exclude<keyof EventInput, 'productIds' | 'budget' | 'expected'>) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setForm({ ...form, [k]: e.target.value })
+  const set = (k: Exclude<keyof EventInput, 'productIds' | 'experienceIds' | 'budget' | 'expected'>) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setForm({ ...form, [k]: e.target.value })
   const num = (k: 'budget' | 'expected') => (e: ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: Number(e.target.value) })
   const toggleProduct = (id: string) =>
     setForm({
@@ -51,6 +54,7 @@ export default function EventForm({ initial, onSubmit, onCancel }: Props) {
   return (
     <form className="stack" onSubmit={submit}>
       <ErrorBox error={error} />
+      <ErrorBox error={productsError || experiencesError} />
       <div className="form-grid">
         <Field label="Nombre del evento" className="full"><input required value={form.name} onChange={set('name')} /></Field>
         <Field label="Tipo de evento">
@@ -63,8 +67,7 @@ export default function EventForm({ initial, onSubmit, onCancel }: Props) {
         </Field>
         <Field label="Fecha"><input type="date" required value={form.date} onChange={set('date')} /></Field>
         <Field label="Lugar"><input required value={form.location} onChange={set('location')} /></Field>
-        <Field label="Organizador"><input required value={form.organizer} onChange={set('organizer')} /></Field>
-        <Field label="Responsable"><input required value={form.manager} onChange={set('manager')} /></Field>
+        <div className="field full"><span>Equipo responsable</span><p className="muted" style={{ margin: 0, fontSize: 13 }}>La asignación de usuarios y las metas se configuran en la ficha del evento, después de guardarlo.</p></div>
         <Field label="Campaña asociada">
           <input list="campaigns" value={form.campaign} onChange={set('campaign')} />
           <datalist id="campaigns">{CAMPAIGNS.map((c) => <option key={c} value={c} />)}</datalist>
@@ -81,14 +84,26 @@ export default function EventForm({ initial, onSubmit, onCancel }: Props) {
           onChange={(imageFile, removeImage) => setForm({ ...form, imageFile, removeImage })}
         />
         <div className="field full">
-          <span>Productos o experiencias destacadas</span>
+          <span>Productos destacados</span>
           <div className="chips">
-            {products?.map((p) => (
+            {products?.filter((p) => !p.archived || form.productIds.includes(p.id)).map((p) => (
               <button type="button" key={p.id} className={`chip ${form.productIds.includes(p.id) ? 'on' : ''}`} onClick={() => toggleProduct(p.id)}>
-                {p.name}
+                {productLabel(p)}{p.archived ? ' (archivado)' : ''}
               </button>
             ))}
           </div>
+        </div>
+        <div className="field full">
+          <span>Experiencias destacadas</span>
+          <div className="chips">
+            {experiences?.filter((e) => !e.archived || form.experienceIds.includes(e.id)).map((e) => <button type="button" key={e.id}
+              className={`chip ${form.experienceIds.includes(e.id) ? 'on' : ''}`} aria-pressed={form.experienceIds.includes(e.id)}
+              onClick={() => setForm({ ...form, experienceIds: form.experienceIds.includes(e.id) ? form.experienceIds.filter((id) => id !== e.id) : [...form.experienceIds, e.id] })}>
+              {e.name}{e.archived ? ' (archivada)' : ''}
+            </button>)}
+            {experiences && !experiences.length && <span className="muted">Todavía no hay experiencias en el catálogo.</span>}
+          </div>
+          <small>Administra productos y experiencias en <Link to="/catalogos">Catálogos</Link>.</small>
         </div>
       </div>
       <div className="row" style={{ justifyContent: 'flex-end' }}>

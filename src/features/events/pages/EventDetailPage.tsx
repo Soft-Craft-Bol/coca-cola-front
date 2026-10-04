@@ -8,10 +8,11 @@ import { optimizeImage } from '@/shared/utils/image'
 import { useAsync } from '@/shared/hooks/useAsync'
 import { dashboardService } from '@/features/dashboard/services/dashboardService'
 import { useEvent, useProducts } from '../hooks/useEvents'
+import EventOperationsPanel from '../components/EventOperationsPanel'
 
 export default function EventDetailPage() {
   const { id = '' } = useParams()
-  const { data: ev, loading, error } = useEvent(id)
+  const { data: ev, loading, error, refresh } = useEvent(id)
   const { data: products } = useProducts()
   const { data: m } = useAsync(() => dashboardService.event(id), [id])
 
@@ -48,8 +49,8 @@ export default function EventDetailPage() {
         <Card title="Información general">
           <div className="stack" style={{ gap: 8, fontSize: 14 }}>
             <div><Badge>{EVENT_STATUS[ev.status]}</Badge></div>
-            <div><strong>Organizador:</strong> {ev.organizer}</div>
-            <div><strong>Responsable:</strong> {ev.manager}</div>
+            <div><strong>Organizador:</strong> {ev.organizer || 'Sin asignar'}</div>
+            <div><strong>Responsable:</strong> {ev.manager || 'Sin asignar'}</div>
             <div><strong>Campaña:</strong> {ev.campaign}</div>
             <div><strong>Canal / aliado:</strong> {ev.channel || '—'}</div>
             <div><strong>Presupuesto:</strong> {formatCurrency(ev.budget)}</div>
@@ -69,6 +70,7 @@ export default function EventDetailPage() {
           <p style={{ fontSize: 12, wordBreak: 'break-all' }}><a href={publicUrl} target="_blank" rel="noreferrer">{publicUrl}</a></p>
         </Card>
       </div>
+      <EventOperationsPanel key={id} eventId={id} onSaved={refresh} />
     </>
   )
 }

@@ -11,7 +11,7 @@ import { downloadCsv, type CsvColumn } from '@/shared/utils/csv'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import EventSelector from '@/features/events/components/EventSelector'
 import ParticipantForm from '../components/ParticipantForm'
-import QrBadge from '../components/QrBadge'
+import Ticket from '../components/Ticket'
 import { participantService } from '../services/participantService'
 
 const CSV_COLUMNS: CsvColumn<Participant>[] = [
@@ -158,11 +158,17 @@ export default function ParticipantsPage() {
           <ParticipantForm event={event} onSubmit={create} />
         </Modal>
       )}
-      {badge && (
-        <Modal title="Credencial de acceso" onClose={() => setBadge(null)}>
-          <QrBadge participant={badge} eventName={event?.name} />
+      {badge && event && (
+        <Modal title="Entrada del participante" onClose={() => setBadge(null)}>
+          <Ticket data={{
+            participantName: `${badge.firstName} ${badge.lastName}`,
+            eventName: event.name,
+            eventDate: event.date,
+            location: event.location,
+            code: badge.qrCode,
+            typeLabel: event.status === 'active' ? 'Inscripción' : 'Pre-inscripción',
+          }} />
           <div className="row" style={{ justifyContent: 'flex-end', marginTop: 14 }}>
-            <button className="btn" onClick={() => window.print()}>Imprimir</button>
             <button className="btn primary" onClick={() => setBadge(null)}>Cerrar</button>
           </div>
         </Modal>

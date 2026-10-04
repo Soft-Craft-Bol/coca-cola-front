@@ -10,6 +10,8 @@ const EventsPage = lazy(() => import('@/features/events/pages/EventsPage'))
 const EventDetailPage = lazy(() => import('@/features/events/pages/EventDetailPage'))
 const ParticipantsPage = lazy(() => import('@/features/participants/pages/ParticipantsPage'))
 const PublicRegisterPage = lazy(() => import('@/features/participants/pages/PublicRegisterPage'))
+const MyTicketPage = lazy(() => import('@/features/participants/pages/MyTicketPage'))
+const TicketPage = lazy(() => import('@/features/participants/pages/TicketPage'))
 const CheckinPage = lazy(() => import('@/features/checkin/pages/CheckinPage'))
 const ActivitiesPage = lazy(() => import('@/features/activities/pages/ActivitiesPage'))
 const SurveysPage = lazy(() => import('@/features/surveys/pages/SurveysPage'))
@@ -26,6 +28,8 @@ export default function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/registro/:eventId" element={<PublicRegisterPage />} />
+      <Route path="/mi-entrada" element={<MyTicketPage />} />
+      <Route path="/entrada/:code" element={<TicketPage />} />
       <Route path="/encuesta/:code" element={<PublicSurveyPage />} />
 
       <Route element={<ProtectedRoute />}>

@@ -12,16 +12,18 @@ interface Props {
   event: CcEvent
   onEdit?: () => void
   onDelete?: () => void
+  onStatusChange?: (status: EventStatus) => void
+  busy?: boolean
 }
 
-export default function EventCard({ event, onEdit, onDelete }: Props) {
+export default function EventCard({ event, onEdit, onDelete, onStatusChange, busy }: Props) {
   const cover = optimizeImage(event.imageUrl, 640, 360)
   const date = new Date(event.date)
 
   return (
     <article className="event-card">
       <div className={`event-cover ${cover ? '' : 'no-image'}`}>
-        {cover ? <img src={cover} alt={event.name} loading="lazy" /> : <CalendarDays size={40} strokeWidth={1.5} />}
+        {cover ? <img src={cover} alt={event.name} loading="lazy" draggable={false} /> : <CalendarDays size={40} strokeWidth={1.5} />}
         <div className="event-status"><Badge tone={TONE[event.status]}>{EVENT_STATUS[event.status]}</Badge></div>
         <div className="event-date">
           <span>{new Intl.DateTimeFormat('es-CO', { day: '2-digit' }).format(date)}</span>
@@ -41,6 +43,13 @@ export default function EventCard({ event, onEdit, onDelete }: Props) {
         </ul>
       </div>
 
+      {onStatusChange && <label className="event-move">
+        <span>{busy ? 'Guardando estado…' : 'Mover a'}</span>
+        <select aria-label={`Estado de ${event.name}`} value={event.status} disabled={busy}
+          onChange={(e) => onStatusChange(e.target.value as EventStatus)}>
+          {Object.entries(EVENT_STATUS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select>
+      </label>}
       <div className="event-actions">
         <Link className="btn small primary icon-inline" to={`/eventos/${event.id}`}><Eye size={14} /> Ver detalle</Link>
         <span className="spacer" />

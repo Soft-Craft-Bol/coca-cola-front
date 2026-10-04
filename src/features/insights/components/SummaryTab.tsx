@@ -39,12 +39,12 @@ export default function SummaryTab({ eventId }: { eventId: string }) {
         actions={<button className="btn primary icon-inline" disabled={busy} onClick={generate}><Sparkles size={15} /> {busy ? 'Generando…' : 'Generar con IA'}</button>}
       >
         <ErrorBox error={aiError} />
-        {!shown && <p className="muted" style={{ margin: 0 }}>Claude redacta un resumen ejecutivo y tres acciones para la próxima activación a partir de los datos reales del evento.</p>}
-        {shown && shown.aiSource === 'claude' && <div className="ai-text">{shown.ai}</div>}
+        {!shown && <p className="muted" style={{ margin: 0 }}>La IA redacta un resumen ejecutivo y tres acciones para la próxima activación a partir de los datos reales del evento (sin datos personales).</p>}
+        {shown && shown.aiSource !== 'local' && <div className="ai-text">{shown.ai}</div>}
         {shown && shown.aiSource === 'local' && (
           <div className="ok-box" style={{ background: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}>
-            La IA no está configurada en el backend. Define <code>ai.anthropic.api-key</code> (o la variable <code>ANTHROPIC_API_KEY</code>)
-            para activarla; mientras tanto se usa el resumen automático de arriba.
+            La IA no está configurada o no respondió. Configura una en el backend: <code>ai.openai.api-key</code> (OpenCode Zen tiene modelos gratis)
+            o <code>ai.anthropic.api-key</code> (Claude). Mientras tanto se usa el resumen automático de arriba.
           </div>
         )}
       </Card>

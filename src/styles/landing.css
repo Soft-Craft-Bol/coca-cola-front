@@ -280,3 +280,22 @@ html:has(.landing) { scroll-behavior: smooth; }
 }
 @keyframes fizz-sway { from { translate: calc(var(--amp) * -1) 0; } to { translate: var(--amp) 0; } }
 @media (max-width: 620px) { .fizz-bubble:nth-child(even) { display: none; } }
+
+/* ---------- eventos abiertos a inscripción ---------- */
+.pub-events { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left; }
+.pub-event { background: #fff; border: 1px solid #ececef; border-radius: 22px; overflow: hidden; box-shadow: 0 18px 40px rgba(20, 20, 30, 0.08); height: 100%; display: flex; flex-direction: column; transition: transform 0.25s ease, box-shadow 0.25s; }
+.pub-event:hover { transform: translateY(-6px); box-shadow: 0 28px 54px rgba(230, 26, 39, 0.16); }
+.pub-cover { position: relative; aspect-ratio: 16 / 9; background: #f3f4f6; overflow: hidden; }
+.pub-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pub-cover.no-image { display: grid; place-items: center; color: rgba(255, 255, 255, 0.85); background: linear-gradient(135deg, #1a0305 0%, #7d0a13 55%, #e61a27 100%); }
+.pub-status { position: absolute; top: 12px; left: 12px; background: rgba(255, 255, 255, 0.95); color: var(--red-dark); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); }
+.pub-body { padding: 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.pub-type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); font-weight: 600; }
+.pub-body h3 { font-size: 20px; margin: 2px 0 6px; }
+.pub-body p { margin: 0; color: var(--muted); font-size: 14px; }
+.pub-body .lp-btn { margin-top: 14px; align-self: flex-start; }
+.lp-btn-red { background: var(--red); color: #fff !important; box-shadow: 0 10px 24px rgba(230, 26, 39, 0.35); }
+.lp-btn-red:hover { background: var(--red-dark); }
+.lp-link { color: var(--red); font-weight: 600; }
+@media (max-width: 980px) { .pub-events { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .pub-events { grid-template-columns: 1fr; } }
