@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { User } from '@/shared/types'
 import { authService } from '@/features/auth/services/authService'
 import { queryClient } from '@/shared/services/queryClient'
+import { useChatStore } from '@/features/assistant/store/chatStore'
 
 interface AuthState {
   user: User | null
@@ -22,6 +23,7 @@ export const useAuthStore = create<AuthState>()(
       logout() {
         authService.logout()
         queryClient.clear()
+        useChatStore.getState().reset()
         set({ user: null })
       },
     }),
