@@ -18,8 +18,8 @@
 .lp-light :is(button, a, input, select):focus-visible, .sv-dialog :is(button):focus-visible { outline: 3px solid rgba(244, 0, 9, 0.45); outline-offset: 2px; }
 
 /* entradas */
-.tk-tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 340px)); justify-content: center; gap: 24px; align-items: start; }
-.tk-ticket .ticket-canvas { max-width: 180px; border-radius: 12px; box-shadow: 0 12px 28px rgba(120, 10, 20, 0.28); }
+.tk-tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 420px)); justify-content: center; gap: 24px; align-items: start; }
+.tk-ticket .ticket-canvas { max-width: 340px; border-radius: 12px; box-shadow: 0 12px 28px rgba(120, 10, 20, 0.28); }
 .tk-ticket { display: flex; flex-direction: column; gap: 7px; background: #fff; border: 1px solid #ECECEF; border-radius: 20px; padding: 16px; box-shadow: 0 8px 28px rgba(20, 20, 20, 0.045); }
 .tk-ticket h3 { font-size: 20px; margin: 6px 0 2px; }
 .tk-ticket-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
