@@ -16,6 +16,7 @@ const CheckinPage = lazy(() => import('@/features/checkin/pages/CheckinPage'))
 const ActivitiesPage = lazy(() => import('@/features/activities/pages/ActivitiesPage'))
 const CouponsPage = lazy(() => import('@/features/coupons/pages/CouponsPage'))
 const SurveysPage = lazy(() => import('@/features/surveys/pages/SurveysPage'))
+const TabletRegisterPage = lazy(() => import('@/features/participants/pages/TabletRegisterPage'))
 const PublicSurveysPage = lazy(() => import('@/features/surveys/pages/PublicSurveysPage'))
 const ReportsPage = lazy(() => import('@/features/reports/pages/ReportsPage'))
 const PowerBiPage = lazy(() => import('@/features/powerbi/pages/PowerBiPage'))
@@ -31,6 +32,7 @@ export default function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/registro/:eventId" element={<PublicRegisterPage />} />
+      <Route path="/tablet/:eventId" element={<TabletRegisterPage />} />
       <Route path="/mi-entrada" element={<MyTicketPage />} />
       <Route path="/entrada/:code" element={<TicketPage />} />
       <Route path="/encuesta/:code" element={<PublicSurveyPage />} />

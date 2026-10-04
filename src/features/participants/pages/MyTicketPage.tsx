@@ -1,21 +1,28 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { Search } from 'lucide-react'
-import logo from '@/assets/coca-cola-logo.png'
-import { Card, ErrorBox, Field } from '@/shared/components/ui'
+import { AlertCircle, Search } from 'lucide-react'
+import LandingNav from '@/features/landing/components/LandingNav'
+import LightDecor from '@/features/landing/components/LightDecor'
+import { useAsync } from '@/shared/hooks/useAsync'
 import type { PublicTicket } from '@/shared/types'
+import '@/styles/landing.css'
+import '@/styles/landing-light.css'
+import '@/styles/my-ticket.css'
 import TicketForPublic from '../components/TicketForPublic'
+import TicketSurveys from '../components/TicketSurveys'
 import { publicService } from '../services/publicService'
 
-// Página pública: el asistente recupera su entrada escribiendo el correo o el celular con el que se inscribió
+// Página pública: el asistente recupera su entrada con el correo o el celular de su inscripción y responde las encuestas de sus eventos
 export default function MyTicketPage() {
   const [contact, setContact] = useState('')
   const [tickets, setTickets] = useState<PublicTicket[] | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+  const { data: events } = useAsync(() => publicService.events(), [])
 
   const search = async (e: FormEvent) => {
     e.preventDefault()
+    if (busy) return
     setBusy(true)
     setError(null)
     try {
@@ -29,32 +36,43 @@ export default function MyTicketPage() {
   }
 
   return (
-    <div className="public-page">
-      <div className="public-card stack">
-        <Link to="/"><img className="public-logo" src={logo} alt="Coca-Cola" /></Link>
-        <Card title="Recupera tu entrada">
-          <form className="stack" onSubmit={search}>
-            <p className="muted" style={{ margin: 0, fontSize: 14 }}>
-              Escribe el correo o el celular con el que te inscribiste y te mostramos tu entrada con el código QR.
-            </p>
-            <Field label="Correo o celular">
-              <input required placeholder="tucorreo@ejemplo.com o 71234567" value={contact} onChange={(e) => setContact(e.target.value)} />
-            </Field>
-            <ErrorBox error={error} />
-            <button className="btn primary icon-inline" disabled={busy}><Search size={15} /> {busy ? 'Buscando…' : 'Buscar mi entrada'}</button>
-          </form>
-        </Card>
+    <div className="landing tk-root">
+      <LandingNav />
+      <main className="lp-light tk-page">
+        <LightDecor variant="hero" />
+        <div className="tk-wrap">
+          <section className="tk-search" aria-labelledby="tk-title">
+            <header className="sh">
+              <span className="sh-eyebrow">MI ENTRADA</span>
+              <h1 id="tk-title" className="sh-title">Recupera tu <span>entrada</span></h1>
+              <p className="sh-lead">Ingresa el correo o celular con el que te inscribiste para recuperar tu entrada y consultar las encuestas de tus eventos.</p>
+            </header>
+            <form className="tk-form" onSubmit={search} aria-busy={busy}>
+              <label htmlFor="tk-contact">Correo o celular</label>
+              <input
+                id="tk-contact" required autoComplete="email" autoCapitalize="none" spellCheck={false}
+                placeholder="tucorreo@ejemplo.com o tu celular" value={contact} onChange={(e) => setContact(e.target.value)}
+              />
+              {error && <div className="tk-error" role="alert"><AlertCircle size={18} aria-hidden="true" /> {error.message}</div>}
+              <button type="submit" className="tk-cta" disabled={busy}><Search size={18} aria-hidden="true" /> {busy ? 'Buscando…' : 'Buscar mi entrada'}</button>
+            </form>
+          </section>
 
-        {tickets && tickets.length === 0 && (
-          <Card title="No encontramos una inscripción">
-            <p style={{ margin: 0 }}>
-              Revisa que el correo o el celular sean los mismos de tu inscripción. Solo se muestran eventos que aún no finalizan.
+          {tickets && tickets.length === 0 && (
+            <div className="tk-empty" role="status">
+              <strong>No encontramos una inscripción.</strong> Revisa que el correo o el celular sean los mismos de tu inscripción. Solo se muestran eventos que aún no finalizan.
               ¿Aún no te inscribes? <Link to="/#eventos">Mira los próximos eventos</Link>.
-            </p>
-          </Card>
-        )}
-        {tickets?.map((t, i) => <TicketForPublic key={t.qrCode} ticket={t} startOpen={tickets.length === 1 && i === 0} />)}
-      </div>
+            </div>
+          )}
+          {tickets && tickets.length > 0 && (
+            <section aria-label="Tus entradas" className="tk-tickets">
+              {tickets.map((t) => <TicketForPublic key={t.qrCode} ticket={t} />)}
+            </section>
+          )}
+
+          <TicketSurveys tickets={tickets} events={events} />
+        </div>
+      </main>
     </div>
   )
 }

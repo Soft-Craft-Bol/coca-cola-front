@@ -3,6 +3,7 @@ import { Card, KpiCard, ProgressBar } from '@/shared/components/ui'
 import { BarsChart, DonutChart } from '@/shared/components/charts'
 import AttendeesMap from '@/shared/components/AttendeesMap'
 import ExperiencesCard from './ExperiencesCard'
+import ImpactSummary from './ImpactSummary'
 import InterestCard from './InterestCard'
 import { SURVEY_CRITERIA } from '@/shared/constants'
 import { formatNumber, formatPercent } from '@/shared/utils/format'
@@ -13,6 +14,7 @@ const criterionLabel = (key: string) => SURVEY_CRITERIA.find((c) => c.key === ke
 export default function EventDashboard({ m }: { m: EventMetrics }) {
   return (
     <div className="stack">
+      <ImpactSummary attended={m.attended} interactions={m.productInteractions} conversions={m.conversions} redemptions={m.redemptions} productInterest={m.productInterest} />
       <div className="grid cols-4">
         <KpiCard label="Participantes" value={m.registered} hint={`Esperados: ${m.event.expected}`} />
         <KpiCard label="Asistentes" value={m.attended} hint={`${formatPercent(m.attendanceRate)} de asistencia`} accent />

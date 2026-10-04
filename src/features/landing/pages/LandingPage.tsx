@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowRight, Menu, X } from 'lucide-react'
+import { useEffect, useRef, type CSSProperties } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import logoWhite from '@/assets/coca-cola-logo-white.png'
 import canRed from '@/assets/landing/can-red.png'
 import canZero from '@/assets/landing/can-zero.png'
@@ -8,6 +8,7 @@ import logoRed from '@/assets/coca-cola-logo-transparent.png'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import '@/styles/landing.css'
 import '@/styles/landing-light.css'
+import LandingNav from '../components/LandingNav'
 import Bubbles from '../components/Bubbles'
 import CountUp from '../components/CountUp'
 import HowItWorks from '../components/HowItWorks'
@@ -31,46 +32,21 @@ const WORDS = ['Medir', 'Entender', 'Mejorar', 'Cada experiencia', 'Cada evento'
 export default function LandingPage() {
   const root = useRef<HTMLDivElement>(null)
   const { isAuthenticated } = useAuth()
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [active, setActive] = useState('')
+  const { hash } = useLocation()
   useParallax(root)
 
+  // Llegar desde otra página con /#seccion: desplaza hasta el ancla una vez montada la landing
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Marca en la barra la sección visible
-  useEffect(() => {
-    const ids = ['eventos', 'solucion', 'como-funciona']
-    const io = new IntersectionObserver(
-      entries => entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id) }),
-      { rootMargin: '-35% 0px -55% 0px' },
-    )
-    ids.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el) })
-    return () => io.disconnect()
-  }, [])
+    if (!hash) return
+    const t = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView(), 50)
+    return () => window.clearTimeout(t)
+  }, [hash])
 
   const cta = isAuthenticated ? { to: '/panel', label: 'Ir al panel' } : { to: '/login', label: 'Ingresar' }
 
   return (
     <div className="landing" ref={root}>
-      {/* ------------------------------------------------ barra superior */}
-      <header className={`lp-nav ${scrolled ? 'scrolled' : ''}`}>
-        <a href="#inicio" className="lp-brand" aria-label="Coca-Cola"><img src={logoWhite} alt="Coca-Cola" /></a>
-        <nav className={open ? 'open' : ''} onClick={() => setOpen(false)}>
-          <a href="#eventos" aria-current={active === 'eventos'}>Eventos</a>
-          <a href="#solucion" aria-current={active === 'solucion'}>Solución</a>
-          <a href="#como-funciona" aria-current={active === 'como-funciona'}>Cómo funciona</a>
-          <Link to="/mi-entrada">Mi entrada</Link>
-          <Link to="/encuestas">Encuestas</Link>
-        </nav>
-        <Link to={cta.to} className="lp-btn lp-btn-white lp-nav-cta">{cta.label}</Link>
-        <button className="lp-burger" onClick={() => setOpen(!open)} aria-label="Abrir menú">{open ? <X size={22} /> : <Menu size={22} />}</button>
-      </header>
+      <LandingNav />
 
       {/* ------------------------------------------------ hero */}
       <section id="inicio" className="lp-hero">

@@ -3,6 +3,7 @@ import Pagination from '@/shared/components/Pagination'
 import type { OverviewMetrics } from '@/shared/types'
 import { Card, KpiCard } from '@/shared/components/ui'
 import { BarsChart, DonutChart, GroupedBars, MultiLineChart } from '@/shared/components/charts'
+import ImpactSummary from './ImpactSummary'
 import AttendeesMap from '@/shared/components/AttendeesMap'
 import ExperiencesCard from './ExperiencesCard'
 import InterestCard from './InterestCard'
@@ -21,6 +22,7 @@ const SERIES: Record<string, string> = {
 export function SummaryPage({ o }: { o: OverviewMetrics }) {
   return (
     <div className="stack">
+      <ImpactSummary attended={o.attended} interactions={o.productInteractions} conversions={o.conversions} redemptions={o.redemptions} productInterest={o.productInterest} scope="de todos los eventos" />
       <div className="grid cols-4">
         <KpiCard label="Eventos" value={o.events} />
         <KpiCard label="Participantes" value={o.registered} />

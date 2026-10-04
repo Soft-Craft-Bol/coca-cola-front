@@ -23,6 +23,7 @@ export default function EventDetailPage() {
   if (!ev) return <Loading />
 
   const publicUrl = `${window.location.origin}/registro/${ev.id}`
+  const tabletUrl = `/tablet/${ev.id}`
 
   return (
     <>
@@ -74,6 +75,7 @@ export default function EventDetailPage() {
           </p>
           <div className="qr-box"><QRCodeSVG value={publicUrl} size={180} /></div>
           <p style={{ fontSize: 12, wordBreak: 'break-all' }}><a href={publicUrl} target="_blank" rel="noreferrer">{publicUrl}</a></p>
+          <a className="btn" href={tabletUrl} target="_blank" rel="noreferrer">Abrir modo tablet (registro en sitio)</a>
         </Card>
       </div>
       <EventOperationsPanel key={id} eventId={id} onSaved={refresh} />

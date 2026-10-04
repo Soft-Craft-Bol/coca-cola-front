@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AlertCircle, ArrowRight, BarChart3, CalendarDays, Eye, EyeOff, Loader2, Lock, Mail, ShieldCheck } from 'lucide-react'
 import logo from '@/assets/coca-cola-logo-transparent.png'
 import logoWhite from '@/assets/coca-cola-logo-white.png'
@@ -64,7 +64,7 @@ export default function LoginPage() {
       </div>
 
       <form className="lg-card" onSubmit={submit} aria-busy={loading}>
-        <img className="lg-logo" src={logo} alt="Coca-Cola" />
+        <Link to="/" className="lg-logo-link" aria-label="Coca-Cola, ir a la página principal"><img className="lg-logo" src={logo} alt="" /></Link>
         <h1>Inteligencia de eventos</h1>
         <p className="lg-sub">Medir. Entender. Mejorar cada experiencia.</p>
 

@@ -185,3 +185,7 @@
   .steps-list::before, .dash-bars i, .dash-rows b i { transform: none !important; }
   .reveal:not(.in) .step-n { transform: none; }
 }
+
+/* botella lateral: casi imperceptible, parcialmente fuera del encuadre y sin interceptar clics */
+.lp-light .light-bottle { position: absolute; z-index: -1; top: 140px; right: -240px; width: 760px; height: auto; opacity: 0.05; pointer-events: none; user-select: none; }
+@media (max-width: 980px) { .lp-light .light-bottle { display: none; } }

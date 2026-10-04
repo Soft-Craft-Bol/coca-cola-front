@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, CheckCircle2, MapPin } from 'lucide-react'
-import { Badge } from '@/shared/components/ui'
+import { CalendarDays, CheckCircle2, MapPin, QrCode } from 'lucide-react'
 import { formatDateTime } from '@/shared/utils/format'
 import type { PublicTicket } from '@/shared/types'
 import Ticket from './Ticket'
@@ -9,15 +8,17 @@ import Ticket from './Ticket'
 export default function TicketForPublic({ ticket, startOpen = false }: { ticket: PublicTicket; startOpen?: boolean }) {
   const [open, setOpen] = useState(startOpen)
   return (
-    <div className="card stack" style={{ gap: 10 }}>
-      <div className="row spread">
-        <Badge tone="red">{ticket.registrationType}</Badge>
-        {ticket.attended && <span className="icon-inline" style={{ color: '#166534', fontSize: 13 }}><CheckCircle2 size={15} /> Ya ingresaste</span>}
+    <article className="tk-ticket">
+      <div className="tk-ticket-top">
+        <span className="tk-pill">{ticket.registrationType}</span>
+        {ticket.attended && <span className="tk-ok"><CheckCircle2 size={15} aria-hidden="true" /> Ya ingresaste</span>}
       </div>
-      <h3 style={{ fontSize: 18, margin: 0 }}>{ticket.eventName}</h3>
-      <span className="icon-inline muted" style={{ fontSize: 14 }}><CalendarDays size={15} /> {formatDateTime(ticket.eventDate)}</span>
-      <span className="icon-inline muted" style={{ fontSize: 14 }}><MapPin size={15} /> {ticket.location}</span>
-      <button className="btn" onClick={() => setOpen(!open)}>{open ? 'Ocultar entrada' : 'Ver mi entrada'}</button>
+      <h3>{ticket.eventName}</h3>
+      <p className="tk-meta"><CalendarDays size={16} aria-hidden="true" /> {formatDateTime(ticket.eventDate)}</p>
+      <p className="tk-meta"><MapPin size={16} aria-hidden="true" /> {ticket.location}</p>
+      <button type="button" className="tk-outline" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <QrCode size={16} aria-hidden="true" /> {open ? 'Ocultar entrada' : 'Ver mi entrada'}
+      </button>
       {open && (
         <Ticket data={{
           participantName: ticket.participantName,
@@ -28,6 +29,6 @@ export default function TicketForPublic({ ticket, startOpen = false }: { ticket:
           typeLabel: ticket.registrationType,
         }} />
       )}
-    </div>
+    </article>
   )
 }

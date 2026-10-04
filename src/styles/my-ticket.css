@@ -1,0 +1,96 @@
+/* Página /mi-entrada y modal de encuesta (prefijos tk- y sv-); reutiliza .sh del encabezado claro */
+.tk-page { padding-top: clamp(88px, 9vw, 108px); min-height: 100vh; }
+.tk-wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); display: grid; gap: 24px; }
+.tk-form { max-width: 640px; margin: 0 auto; width: 100%; display: grid; gap: 10px; background: #fff; border: 1px solid #ECECEF; border-radius: 22px; padding: 32px; box-shadow: 0 8px 28px rgba(20, 20, 20, 0.045); }
+.tk-form label { font-weight: 600; font-size: 15px; }
+.tk-form input { height: 52px; padding: 0 16px; font: inherit; font-size: 16px; border: 1px solid #DCE0E7; border-radius: 14px; outline: none; transition: border-color 0.18s, box-shadow 0.18s; }
+.tk-form input:focus { border-color: #F40009; box-shadow: 0 0 0 4px rgba(244, 0, 9, 0.1); }
+.tk-cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 22px; border: 0; border-radius: 999px; background: #F40009; color: #fff !important; font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; transition: background 0.2s; }
+.tk-form .tk-cta { margin-top: 8px; width: 100%; }
+.tk-cta:hover:not(:disabled) { background: #D90008; }
+.tk-cta:disabled { opacity: 0.7; cursor: progress; }
+.tk-cta svg { transition: transform 0.2s; }
+.tk-cta:hover:not(:disabled) svg { transform: translateX(3px); }
+.tk-error, .sv-error { display: flex; align-items: flex-start; gap: 8px; padding: 12px 14px; border-radius: 12px; background: #FFF2F3; border: 1px solid #F7B8BC; color: #A9000D; font-size: 14px; }
+.tk-error svg, .sv-error svg { flex: none; margin-top: 1px; }
+.tk-empty { max-width: 640px; margin: 0 auto; width: 100%; padding: 22px 24px; border: 1px dashed #E2E3E8; border-radius: 18px; background: #FAFAFA; color: #687080; line-height: 1.6; text-align: center; }
+.tk-empty a { color: #F40009; font-weight: 600; }
+.lp-light :is(button, a, input, select):focus-visible, .sv-dialog :is(button):focus-visible { outline: 3px solid rgba(244, 0, 9, 0.45); outline-offset: 2px; }
+
+/* entradas */
+.tk-tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 340px)); justify-content: center; gap: 24px; align-items: start; }
+.tk-ticket .ticket-canvas { max-width: 180px; border-radius: 12px; box-shadow: 0 12px 28px rgba(120, 10, 20, 0.28); }
+.tk-ticket { display: flex; flex-direction: column; gap: 7px; background: #fff; border: 1px solid #ECECEF; border-radius: 20px; padding: 16px; box-shadow: 0 8px 28px rgba(20, 20, 20, 0.045); }
+.tk-ticket h3 { font-size: 20px; margin: 6px 0 2px; }
+.tk-ticket-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.tk-pill { padding: 5px 12px; border-radius: 999px; background: #FFF2F3; color: #F40009; font-size: 12px; font-weight: 700; }
+.tk-ok { display: inline-flex; align-items: center; gap: 6px; color: #166534; font-size: 13px; font-weight: 600; }
+.tk-meta { display: flex; align-items: center; gap: 8px; margin: 0; color: #687080; font-size: 14px; }
+.tk-meta svg { color: #F40009; flex: none; }
+.tk-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 1px solid #F40009; border-radius: 999px; background: #fff; color: #F40009; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+.tk-outline:hover { background: #FFF2F3; }
+
+/* encuestas */
+.tk-surveys { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.tk-survey { display: flex; flex-direction: column; gap: 6px; background: #fff; border: 1px solid #ECECEF; border-radius: 20px; padding: 24px; box-shadow: 0 8px 28px rgba(20, 20, 20, 0.045); transition: transform 0.2s, box-shadow 0.2s; }
+.tk-survey:hover { transform: translateY(-3px); box-shadow: 0 12px 34px rgba(20, 20, 20, 0.07); }
+.tk-survey-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.tk-survey-head img, .tk-ph { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; background: #F3F4F6; display: grid; place-items: center; color: #B5BAC4; }
+.tk-survey h3 { font-size: 19px; margin: 0; }
+.tk-survey-event { margin: 0 0 4px; font-weight: 600; color: #171717; }
+.tk-desc { margin: 4px 0 14px; color: #687080; font-size: 15px; line-height: 1.55; }
+.tk-survey .tk-cta { margin-top: auto; }
+.tk-state { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #F4F4F6; color: #687080; }
+.tk-state.pending { background: #FFF2F3; color: #D90008; }
+.tk-state.answered { background: #ECFDF3; color: #166534; }
+.tk-thanks { margin: auto 0 0; color: #166534; font-size: 14px; font-weight: 500; }
+.tk-retry { margin-top: auto; display: grid; gap: 4px; color: #A9000D; font-size: 14px; }
+.tk-retry span { display: flex; align-items: center; gap: 6px; }
+
+/* modal de la encuesta */
+.sv-dialog { width: min(640px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; border: 0; border-radius: 24px; box-shadow: 0 30px 80px rgba(20, 0, 0, 0.35); color: #171717; font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif; }
+.sv-dialog::backdrop { background: rgba(20, 20, 20, 0.55); }
+.sv-box { padding: clamp(20px, 4vw, 32px); }
+.sv-box header { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.sv-box h2 { font-size: 24px; margin: 0 0 4px; }
+.sv-box header p { margin: 0; color: #687080; }
+.sv-box header .sv-for { margin-top: 6px; color: #171717; }
+.sv-x { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 12px; background: #F4F4F6; cursor: pointer; }
+.sv-hint { color: #687080; font-size: 14px; margin: 8px 0 18px; }
+.sv-q { display: grid; gap: 8px; padding: 14px 0; border-top: 1px solid #EEF0F3; }
+.sv-label { font-weight: 600; font-size: 15px; line-height: 1.4; }
+.sv-stars, .sv-nps { display: flex; flex-wrap: wrap; gap: 6px; }
+.sv-stars button { width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: none; color: #C9CDD6; cursor: pointer; border-radius: 10px; }
+.sv-stars button.on { color: #F40009; }
+.sv-stars button:hover { background: #FFF2F3; }
+.sv-nps button { min-width: 44px; height: 44px; border: 1px solid #DCE0E7; border-radius: 12px; background: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+.sv-nps button:hover { background: #FFF2F3; }
+.sv-nps button.on { background: #F40009; border-color: #F40009; color: #fff; }
+.sv-error { margin-top: 12px; }
+.sv-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.sv-primary, .sv-secondary { min-height: 48px; padding: 0 24px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; }
+.sv-primary { border: 0; background: #F40009; color: #fff; }
+.sv-primary:hover:not(:disabled) { background: #D90008; }
+.sv-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+.sv-secondary { border: 1px solid #DCE0E7; background: #fff; color: #171717; }
+.sv-done { text-align: center; display: grid; justify-items: center; gap: 8px; padding: 12px 0; }
+.sv-done svg { color: #166534; }
+.sv-done h2 { font-size: 22px; margin: 0; }
+.sv-done p { margin: 0 0 12px; color: #687080; }
+
+@media (max-width: 980px) { .tk-surveys { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) {
+  .tk-surveys { grid-template-columns: 1fr; gap: 20px; }
+  .tk-form { padding: 22px; }
+  .tk-wrap { gap: 32px; }
+}
+@media (prefers-reduced-motion: reduce) { .tk-survey, .tk-cta svg { transition: none !important; } .tk-survey:hover { transform: none; } }
+
+/* botella protagonista en el borde izquierdo: inclinada, recortada y difuminada hacia abajo; las tarjetas blancas quedan por encima */
+.lp-light .light-bottle.hero {
+  top: 10px; left: -560px; right: auto; width: 1200px; opacity: 1; transform: rotate(-12deg); transform-origin: 50% 40%;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 88%); mask-image: linear-gradient(to bottom, #000 55%, transparent 88%);
+  filter: drop-shadow(0 30px 40px rgba(120, 0, 8, 0.22));
+}
+.tk-page .light-wave { width: 100%; opacity: 0.8; }
+@media (max-width: 1100px) { .lp-light .light-bottle.hero { display: none; } }
