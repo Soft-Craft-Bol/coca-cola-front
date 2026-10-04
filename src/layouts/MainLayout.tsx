@@ -4,6 +4,7 @@ import { LogOut } from 'lucide-react'
 import logo from '@/assets/coca-cola-logo.png'
 import { useAuth, useCurrentUser } from '@/features/auth/hooks/useAuth'
 import { ROLE_LABELS } from '@/shared/constants'
+import ChatBubble from '@/features/assistant/components/ChatBubble'
 import Navbar from './Navbar'
 import { NAV } from './navItems'
 import { Loading } from '@/shared/components/ui'
@@ -68,6 +69,8 @@ export default function MainLayout() {
           <Suspense fallback={<Loading />}><Outlet /></Suspense>
         </main>
       </div>
+      {/* el asistente consulta datos de participantes agregados: solo administración y marketing */}
+      {(user.role === 'admin' || user.role === 'marketing') && <ChatBubble />}
     </div>
   )
 }
