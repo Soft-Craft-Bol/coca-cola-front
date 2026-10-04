@@ -7,7 +7,7 @@ export const NAV = [
   { to: '/cupones', label: 'Cupones', icon: Ticket, roles: ['admin', 'organizer', 'marketing'] },
   { to: '/checkin', label: 'Ingreso QR', icon: QrCode, roles: ['admin', 'organizer'] },
   { to: '/actividades', label: 'Actividades', icon: GlassWater, roles: ['admin', 'organizer'] },
-  { to: '/encuestas', label: 'Encuestas', icon: Star, roles: ['admin', 'organizer'] },
+  { to: '/gestion-encuestas', label: 'Encuestas', icon: Star, roles: ['admin', 'organizer'] },
   { to: '/inteligencia', label: 'Inteligencia', icon: Sparkles, roles: ['admin', 'marketing'] },
   { to: '/comunicaciones', label: 'Comunicaciones', icon: Send, roles: ['admin', 'marketing'] },
   { to: '/reportes', label: 'Reportes', icon: FileText, roles: ['admin', 'marketing'] },

@@ -68,6 +68,7 @@ export default function LandingPage() {
           <a href="#solucion">Solución</a>
           <a href="#como-funciona">Cómo funciona</a>
           <Link to="/mi-entrada">Mi entrada</Link>
+          <Link to="/encuestas">Encuestas</Link>
         </nav>
         <Link to={cta.to} className="lp-btn lp-btn-white lp-nav-cta">{cta.label}</Link>
         <button className="lp-burger" onClick={() => setOpen(!open)} aria-label="Abrir menú">{open ? <X size={22} /> : <Menu size={22} />}</button>

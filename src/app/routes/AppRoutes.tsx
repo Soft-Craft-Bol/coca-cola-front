@@ -16,6 +16,7 @@ const CheckinPage = lazy(() => import('@/features/checkin/pages/CheckinPage'))
 const ActivitiesPage = lazy(() => import('@/features/activities/pages/ActivitiesPage'))
 const CouponsPage = lazy(() => import('@/features/coupons/pages/CouponsPage'))
 const SurveysPage = lazy(() => import('@/features/surveys/pages/SurveysPage'))
+const PublicSurveysPage = lazy(() => import('@/features/surveys/pages/PublicSurveysPage'))
 const ReportsPage = lazy(() => import('@/features/reports/pages/ReportsPage'))
 const PowerBiPage = lazy(() => import('@/features/powerbi/pages/PowerBiPage'))
 const InsightsPage = lazy(() => import('@/features/insights/pages/InsightsPage'))
@@ -33,6 +34,7 @@ export default function AppRoutes() {
       <Route path="/mi-entrada" element={<MyTicketPage />} />
       <Route path="/entrada/:code" element={<TicketPage />} />
       <Route path="/encuesta/:code" element={<PublicSurveyPage />} />
+      <Route path="/encuestas" element={<PublicSurveysPage />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
@@ -45,7 +47,7 @@ export default function AppRoutes() {
           <Route element={<ProtectedRoute roles={['admin', 'organizer']} />}>
             <Route path="/checkin" element={<CheckinPage />} />
             <Route path="/actividades" element={<ActivitiesPage />} />
-            <Route path="/encuestas" element={<SurveysPage />} />
+            <Route path="/gestion-encuestas" element={<SurveysPage />} />
           </Route>
           <Route element={<ProtectedRoute roles={['admin', 'marketing']} />}>
             <Route path="/reportes" element={<ReportsPage />} />
